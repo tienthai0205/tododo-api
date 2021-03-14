@@ -1,5 +1,9 @@
+/Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/repositories/UserRepository.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/SecurityConfiguration.java
+/Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/models/User.java
+/Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/SwaggerConfig.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/models/MyUserDetails.java
+/Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/services/JwtUtil.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/services/MyUserDetailsService.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/controllers/HomeController.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/ApiApplication.java
