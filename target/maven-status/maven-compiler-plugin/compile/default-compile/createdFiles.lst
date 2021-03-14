@@ -1,0 +1,5 @@
+com/tododo/api/services/MyUserDetailsService.class
+com/tododo/api/SecurityConfiguration.class
+com/tododo/api/models/MyUserDetails.class
+com/tododo/api/controllers/HomeController.class
+com/tododo/api/ApiApplication.class
