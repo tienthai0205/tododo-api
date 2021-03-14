@@ -1,3 +1,4 @@
+/Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/filters/JwtRequestFilter.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/repositories/UserRepository.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/SecurityConfiguration.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/models/User.java
