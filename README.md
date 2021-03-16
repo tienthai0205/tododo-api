@@ -25,7 +25,7 @@ Swagger documentation could be found at:
         }
         ```
 
-        Login Url: POST `https://localhost:5055/api/authenticate`
+        Login Url: POST `http://localhost:5055/api/authenticate`
 
         Sample request body:
 
@@ -43,7 +43,7 @@ Swagger documentation could be found at:
 2. Register 
     - Register new user
 
-        Register Url: POST `https://localhost:5055/api/register`
+        Register Url: POST `http://localhost:5055/api/register`
 
         Sample request body:
 
@@ -68,4 +68,21 @@ Swagger documentation could be found at:
             "active": true,
             "role": "user"
         }
+        ```
+3. Test Get request
+    - Receive "Hello user!" as response
+
+        Test URL: GET `http://localhost:5055/api/hello`
+
+        Before adding authorization header, you are expected to receive response with code 401-Unauthorized.
+
+        - In Postman, choose Authorization type as Bearer Token if using Authorization tab. If using Headers, specify Key="Authorization" and Value=Bearer <your_access_token> (**space** between `Bearer` and `access_token`)
+
+        *Note: To retrieve access_token, you need to authenticate yourself by providing the valid credentials and follow Section 1 above
+
+        *Response body:* 
+
+        ```json
+        200 OK 
+        Hello user!
         ```
