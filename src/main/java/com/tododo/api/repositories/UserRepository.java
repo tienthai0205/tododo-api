@@ -2,11 +2,12 @@ package com.tododo.api.repositories;
 
 import java.util.Optional;
 
-import com.tododo.api.models.User;
+import com.tododo.api.models.UserEntity;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UserRepository extends JpaRepository<User, Integer> {
-    Optional<User> findByUsername(String username);
+@Repository
+public interface UserRepository extends CrudRepository<UserEntity, Integer> {
+    UserEntity findByUsername(String username);
 }

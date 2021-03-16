@@ -1,102 +1,63 @@
 package com.tododo.api.controllers;
 
-import com.tododo.api.models.MyUserDetails;
-import com.tododo.api.models.User;
-import com.tododo.api.repositories.UserRepository;
+import com.tododo.api.models.AuthenticationRequest;
+import com.tododo.api.models.AuthenticationResponse;
+import com.tododo.api.models.UserEntity;
 import com.tododo.api.services.JwtUtil;
 import com.tododo.api.services.MyUserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api")
 public class HomeController {
-    BCryptPasswordEncoder b = new BCryptPasswordEncoder();
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private MyUserDetailsService userDetailsService;
-
-    @Autowired
-    PasswordEncoder bcryptEncoder;
-
-    @Autowired
     private JwtUtil jwtTokenUtil;
 
     @Autowired
-    private UserRepository userRepository;
+    private MyUserDetailsService userDetailsService;
 
-    @GetMapping("/")
-    public String home() {
-        return ("<h1>Welcome</h1>");
+    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
+            throws Exception {
+
+        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+
+        final String token = jwtTokenUtil.generateToken(userDetails);
+
+        return ResponseEntity.ok(new AuthenticationResponse(token));
     }
 
-    @GetMapping("/user")
-    public String user() {
-        return ("<h1>Welcome User</h1>");
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<?> saveUser(@RequestBody AuthenticationRequest user) throws Exception {
+        return ResponseEntity.ok(userDetailsService.save(user));
     }
 
-    @GetMapping("/admin")
-    public String admin() {
-        return ("<h1>Welcome Admin</h1>");
-    }
-
-    @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody User user)
-            throws Exception, UsernameNotFoundException {
-
-        // try {
-        // authenticationManager
-        // .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),
-        // user.getPassword()));
-        // } catch (BadCredentialsException e) {
-        // throw new Exception("Incorrect username or password");
-        // }
-        String username = user.getUsername();
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-        if (!b.matches(user.getPassword(), userDetails.getPassword())) {
-            return new ResponseEntity<>("Wrong password! ", HttpStatus.BAD_REQUEST);
+    private void authenticate(String username, String password) throws Exception {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (DisabledException e) {
+            throw new Exception("USER_DISABLED", e);
+        } catch (BadCredentialsException e) {
+            throw new Exception("INVALID_CREDENTIALS", e);
         }
-
-        final String jwt = jwtTokenUtil.generateToken(userDetails);
-
-        return ResponseEntity.ok("accessToken: " + jwt);
     }
-
-    @PostMapping(value = "/register")
-    public ResponseEntity<?> saveUser(@RequestBody User user) throws UsernameNotFoundException {
-
-        // UserDetails existingUser =
-        // userDetailsService.loadUserByUsername(user.getUsername());
-        // if (existingUser != null) {
-        // return new ResponseEntity<>("User with that username already exist!",
-        // HttpStatus.BAD_REQUEST);
-        // }
-        User newUser = new User();
-        newUser.setUsername(user.getUsername());
-        newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-        newUser.setActive(true);
-        userRepository.save(newUser);
-        return ResponseEntity.ok(newUser);
-    }
-
 }
