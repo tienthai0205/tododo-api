@@ -2,6 +2,7 @@ package com.tododo.api.controllers;
 
 import com.tododo.api.models.MyUserDetails;
 import com.tododo.api.models.User;
+import com.tododo.api.repositories.UserRepository;
 import com.tododo.api.services.JwtUtil;
 import com.tododo.api.services.MyUserDetailsService;
 
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api")
 public class HomeController {
     BCryptPasswordEncoder b = new BCryptPasswordEncoder();
 
@@ -38,6 +40,9 @@ public class HomeController {
 
     @Autowired
     private JwtUtil jwtTokenUtil;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/")
     public String home() {
@@ -77,17 +82,20 @@ public class HomeController {
         return ResponseEntity.ok("accessToken: " + jwt);
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<?> saveUser(@RequestBody User user) {
+    @PostMapping(value = "/register")
+    public ResponseEntity<?> saveUser(@RequestBody User user) throws UsernameNotFoundException {
 
-        UserDetails existingUser = userDetailsService.loadUserByUsername(user.getUsername());
-        if (existingUser != null) {
-
-            return new ResponseEntity<>("User with that username already exist!", HttpStatus.BAD_REQUEST);
-        }
+        // UserDetails existingUser =
+        // userDetailsService.loadUserByUsername(user.getUsername());
+        // if (existingUser != null) {
+        // return new ResponseEntity<>("User with that username already exist!",
+        // HttpStatus.BAD_REQUEST);
+        // }
         User newUser = new User();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
+        newUser.setActive(true);
+        userRepository.save(newUser);
         return ResponseEntity.ok(newUser);
     }
 
