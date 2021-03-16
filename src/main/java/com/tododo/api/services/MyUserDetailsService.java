@@ -32,6 +32,10 @@ public class MyUserDetailsService implements UserDetailsService {
     }
 
     public UserEntity save(AuthenticationRequest user) {
+        UserEntity existingUser = userRepository.findByUsername(user.getUsername());
+        if (existingUser != null) {
+            return null;
+        }
         UserEntity newUser = new UserEntity();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));

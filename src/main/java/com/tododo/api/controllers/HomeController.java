@@ -7,6 +7,7 @@ import com.tododo.api.services.JwtUtil;
 import com.tododo.api.services.MyUserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -48,7 +49,12 @@ public class HomeController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<?> saveUser(@RequestBody AuthenticationRequest user) throws Exception {
-        return ResponseEntity.ok(userDetailsService.save(user));
+        UserEntity newUser = userDetailsService.save(user);
+        if (newUser == null) {
+            return new ResponseEntity<>("User with that username already exists!", HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.ok(newUser);
     }
 
     private void authenticate(String username, String password) throws Exception {
