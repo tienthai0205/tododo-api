@@ -21,6 +21,17 @@ public class User {
     private boolean active;
     private String role;
 
+    // TODO: 
+    /*
+    needs references to group (list of groups)
+    needs reference to self (list of friends (users))
+    needs reference to tag (list of tags)
+    needs reference to note (list of notes)
+    needs refernece to todo (list of items)
+    
+    Didn't want to do these yet as I don't want to mess up the User class you made hehe
+    */
+     
     public User(String username, String password) {
         this.username = username;
         this.password = password;
