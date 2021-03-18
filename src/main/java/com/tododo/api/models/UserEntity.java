@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -29,15 +31,19 @@ public class UserEntity {
     @Column
     private String role;
 
-    // @ManyToMany(mappedBy = "members", fetch = FetchType.LAZY)
-    // private Set<Group> groups;
-
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Todo> todoItems;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Note> notes;
 
     public int getId() {
         return this.id;
     }
+
+    @ManyToMany
+    @JoinTable(name = "userGroup", joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<Tag> groups;
 
     public String getUsername() {
         return this.username;

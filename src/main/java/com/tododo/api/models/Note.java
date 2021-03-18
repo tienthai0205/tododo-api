@@ -1,6 +1,5 @@
 package com.tododo.api.models;
 
-import java.sql.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -16,8 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "todo")
-public class Todo {
+@Table(name = "note")
+public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -25,26 +24,15 @@ public class Todo {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
-
-    @Column
     private String title;
-    @Column
     private String description;
-    @Column
-    private float percentage;
-    @Column
-    private long duration;
-    @Column
-    private Date dueDate;
     // private Group group;
 
-    // @ManyToMany(fetch = FetchType.LAZY)
-    // @JoinTable(name = "user", joinColumns = @JoinColumn(name = "user_id"),
-    // inverseJoinColumns = @JoinColumn(name = "todo_id"))
-    // @Column(name = "user")
-    // private Set<UserEntity> users;
     @ManyToMany
-    @JoinTable(name = "todoTag", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "todo_id"))
+    @JoinTable(name = "noteTag", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "note_id"))
     private Set<Tag> tags;
+
+    // @ManyToMany
+    // private Set<User> sharedWith;
 
 }
