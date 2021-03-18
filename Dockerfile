@@ -1,9 +1,11 @@
 FROM maven:3.5.2-jdk-8-alpine AS MAVEN_BUILD
-COPY pom.xml /build/
-COPY src /build/src/
-WORKDIR /build/
-RUN mvn package
-FROM openjdk:8-jre-alpine
 WORKDIR /app
-COPY --from=MAVEN_BUILD /build/target/app.jar /app/
-ENTRYPOINT ["java", "-jar", "app.jar"]
+COPY . src
+CMD cd src ; ./mvnw spring-boot:run
+# RUN ./mvnw spring-boot:run
+# WORKDIR /app
+# RUN ./mvnw package
+# FROM openjdk:8-jre-alpine
+# COPY --from=MAVEN_BUILD /build/target/*.jar /app/
+# # ENTRYPOINT ["./mvnw", "spring-boot:run"]
+# ENTRYPOINT ["java","-jar","/*.jar"]
