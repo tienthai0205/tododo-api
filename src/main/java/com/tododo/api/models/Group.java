@@ -9,34 +9,31 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table
+@Table(name = "`group`")
 public class Group {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String name; 
-    
-    @ManyToMany
-    private Set<User> members;
-    @ManyToMany
-    private Set<Note> notes;  
-    @ManyToMany
-    private Set<Todo> items; 
+    @Column(unique = true)
+    private String name;
+    @Column
+    private String description;
 
-    public Group(String name, Set<User> members, Set<Note> notes, Set<Todo> items) {
+    @ManyToMany(mappedBy = "groups")
+    private Set<UserEntity> members;
+
+    public Group(String name, Set<UserEntity> members) {
         this.name = name;
         this.members = members;
-        this.notes = notes;
-        this.items = items;
+        // this.notes = notes;
+        // this.items = items;
     }
 
     public Group() {
     }
-    
+
     public int getId() {
         return this.id;
     }
@@ -53,28 +50,8 @@ public class Group {
         this.name = name;
     }
 
-    public Set<User> getMembers() {
+    public Set<UserEntity> getMembers() {
         return this.members;
     }
 
-    public void setMembers(Set<User> members) {
-        this.members = members;
-    }
-
-    public Set<Note> getNotes() {
-        return this.notes;
-    }
-
-    public void setNotes(Set<Note> notes) {
-        this.notes = notes;
-    }
-
-    public Set<Todo> getItems() {
-        return this.items;
-    }
-
-    public void setItems(Set<Todo> items) {
-        this.items = items;
-    }
-    
 }

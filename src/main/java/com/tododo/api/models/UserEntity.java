@@ -1,52 +1,49 @@
 package com.tododo.api.models;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table
-public class User {
+@Table(name = "user")
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(unique = true)
+    @Column
     private String username;
+    @Column
     private String password;
+    @Column
     private boolean active;
+    @Column
     private String role;
 
-    // TODO: 
-    /*
-    needs references to group (list of groups)
-    needs reference to self (list of friends (users))
-    needs reference to tag (list of tags)
-    needs reference to note (list of notes)
-    needs refernece to todo (list of items)
-    
-    Didn't want to do these yet as I don't want to mess up the User class you made hehe
-    */
-     
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Todo> todoItems;
 
-    public User() {
-    }
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Note> notes;
 
     public int getId() {
         return this.id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    @ManyToMany
+    @JoinTable(name = "userGroup", joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<Tag> groups;
 
     public String getUsername() {
         return this.username;

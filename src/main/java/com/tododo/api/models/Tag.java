@@ -9,41 +9,41 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+
+import org.springframework.data.jpa.repository.Query;
 
 @Entity
-@Table
+@Table(name = "tag")
 public class Tag {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(unique = true) // you can't have tag "work" and "work" for the same user
+    @Column(unique = true)
     private String title;
     private String description;
-    
-    @ManyToMany
-    private Set<Todo> items;
-    @ManyToMany
-    private Set<Note> notes; 
-    
 
-    public Tag(String title, String description, Set<Todo> items, Set<Note> notes) {
-        this.title = title;
-        this.description = description;
-        this.items = items;
-        this.notes = notes;
-    }
+    @ManyToMany(mappedBy = "tags")
+    private Set<Todo> todoItems;
+
+    @ManyToMany(mappedBy = "tags")
+    private Set<Note> notes;
+
+    // @Query(value = "select * user_id from note where note.id=")
+    // private UserEntity user;
 
     public Tag() {
     }
 
-    public int getId() {
-        return this.id;
+    public Tag(int id, String title, String description, Set<Todo> todoItems, Set<Note> notes) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.todoItems = todoItems;
+        this.notes = notes;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getId() {
+        return this.id;
     }
 
     public String getTitle() {
@@ -62,20 +62,12 @@ public class Tag {
         this.description = description;
     }
 
-    public Set<Todo> getItems() {
-        return this.items;
-    }
-
-    public void setItems(Set<Todo> items) {
-        this.items = items;
+    public Set<Todo> getTodoItems() {
+        return this.todoItems;
     }
 
     public Set<Note> getNotes() {
         return this.notes;
-    }
-
-    public void setNotes(Set<Note> notes) {
-        this.notes = notes;
     }
 
 }

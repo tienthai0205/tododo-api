@@ -1,69 +1,78 @@
 package com.tododo.api.models;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table
+@Table(name = "todo")
 public class Todo {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(unique = true)
-    private User createdBy;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
+
+    @Column
     private String title;
+    @Column
     private String description;
+    @Column
     private float percentage;
+    @Column
     private long duration;
+    @Column
     private Date dueDate;
-    private Group group;
+    // private Group group;
+
+    // @ManyToMany(fetch = FetchType.LAZY)
+    // @JoinTable(name = "user", joinColumns = @JoinColumn(name = "user_id"),
+    // inverseJoinColumns = @JoinColumn(name = "todo_id"))
+    // @Column(name = "user")
+    // private Set<UserEntity> shareWith;
 
     @ManyToMany
-    private Set<User> sharedWith;
-    @ManyToMany
+    @JoinTable(name = "todoTag", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "todo_id"))
     private Set<Tag> tags;
 
+    public Todo() {
+    }
 
-    public Todo(User createdBy, String title, String description, float percentage, long duration, Date dueDate) {
-        this.createdBy = createdBy;
+    public Todo(int id, UserEntity user, String title, String description, float percentage, long duration,
+            Date dueDate, Set<Tag> tags) {
+        this.id = id;
+        this.user = user;
         this.title = title;
         this.description = description;
         this.percentage = percentage;
         this.duration = duration;
         this.dueDate = dueDate;
-    }
-
-    public Todo() {
-    }
-
-    public void addSharedWidth(User user) {
-        this.sharedWith.add(user);
+        this.tags = tags;
     }
 
     public int getId() {
         return this.id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public UserEntity getUser() {
+        return this.user;
     }
 
-    public User getCreatedBy() {
-        return this.createdBy;
-    }
-
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
     public String getTitle() {
@@ -106,28 +115,8 @@ public class Todo {
         this.dueDate = dueDate;
     }
 
-    public Set<User> getSharedWith() {
-        return this.sharedWith;
-    }
-
-    public void setSharedWith(Set<User> sharedWith) {
-        this.sharedWith = sharedWith;
-    }
-
     public Set<Tag> getTags() {
         return this.tags;
-    }
-
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
-    }
-
-    public Group getGroup() {
-        return this.group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
     }
 
 }

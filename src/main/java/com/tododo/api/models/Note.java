@@ -2,39 +2,44 @@ package com.tododo.api.models;
 
 import java.util.Set;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table
+@Table(name = "note")
 public class Note {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private User createdBy;
-    private String title;
-    private String description; 
-    private Group group;
-    
-    @ManyToMany
-    private Set<Tag> tags;
-    @ManyToMany
-    private Set<User> sharedWith;  
 
-    public Note(User createdBy, String title, String description, Group group, Set<Tag> tags, Set<User> sharedWith) {
-        this.createdBy = createdBy;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
+
+    private String title;
+    private String description;
+    // private Group group;
+
+    @ManyToMany
+    @JoinTable(name = "noteTag", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "note_id"))
+    private Set<Tag> tags;
+
+    // @ManyToMany
+    // private Set<User> sharedWith;
+
+    public Note(UserEntity user, String title, String description, Set<Tag> tags) {
+        this.user = user;
         this.title = title;
         this.description = description;
-        this.group = group;
         this.tags = tags;
-        this.sharedWith = sharedWith;
     }
 
     public Note() {
@@ -48,12 +53,12 @@ public class Note {
         this.id = id;
     }
 
-    public User getCreatedBy() {
-        return this.createdBy;
+    public UserEntity getCreatedBy() {
+        return this.user;
     }
 
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
     public String getTitle() {
@@ -72,28 +77,7 @@ public class Note {
         this.description = description;
     }
 
-    public Group getGroup() {
-        return this.group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
     public Set<Tag> getTags() {
         return this.tags;
     }
-
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
-    }
-
-    public Set<User> getSharedWith() {
-        return this.sharedWith;
-    }
-
-    public void setSharedWith(Set<User> sharedWith) {
-        this.sharedWith = sharedWith;
-    }
-
 }
