@@ -42,9 +42,81 @@ public class Todo {
     // @JoinTable(name = "user", joinColumns = @JoinColumn(name = "user_id"),
     // inverseJoinColumns = @JoinColumn(name = "todo_id"))
     // @Column(name = "user")
-    // private Set<UserEntity> users;
+    // private Set<UserEntity> shareWith;
+
     @ManyToMany
     @JoinTable(name = "todoTag", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "todo_id"))
     private Set<Tag> tags;
+
+    public Todo() {
+    }
+
+    public Todo(int id, UserEntity user, String title, String description, float percentage, long duration,
+            Date dueDate, Set<Tag> tags) {
+        this.id = id;
+        this.user = user;
+        this.title = title;
+        this.description = description;
+        this.percentage = percentage;
+        this.duration = duration;
+        this.dueDate = dueDate;
+        this.tags = tags;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public UserEntity getUser() {
+        return this.user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public float getPercentage() {
+        return this.percentage;
+    }
+
+    public void setPercentage(float percentage) {
+        this.percentage = percentage;
+    }
+
+    public long getDuration() {
+        return this.duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public Date getDueDate() {
+        return this.dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public Set<Tag> getTags() {
+        return this.tags;
+    }
 
 }

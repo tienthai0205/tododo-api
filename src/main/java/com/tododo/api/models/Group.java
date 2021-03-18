@@ -24,7 +24,34 @@ public class Group {
     @ManyToMany(mappedBy = "groups")
     private Set<UserEntity> members;
 
-    // @Query(value = "select * user_id from note where note.id=")
-    // private UserEntity user;
+    public Group(String name, Set<UserEntity> members) {
+        this.name = name;
+        this.members = members;
+        // this.notes = notes;
+        // this.items = items;
+    }
+
+    public Group() {
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Set<UserEntity> getMembers() {
+        return this.members;
+    }
 
 }

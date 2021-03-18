@@ -31,4 +31,43 @@ public class Tag {
     // @Query(value = "select * user_id from note where note.id=")
     // private UserEntity user;
 
+    public Tag() {
+    }
+
+    public Tag(int id, String title, String description, Set<Todo> todoItems, Set<Note> notes) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.todoItems = todoItems;
+        this.notes = notes;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<Todo> getTodoItems() {
+        return this.todoItems;
+    }
+
+    public Set<Note> getNotes() {
+        return this.notes;
+    }
+
 }
