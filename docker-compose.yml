@@ -1,27 +1,28 @@
 version: '3'
 
 services: 
-  myapp-mysql:
-    image: mysql:8.0
+  tododo-app:
+    build: ./
     environment:
-      - MYSQL_ROOT_PASSWORD=
-      - MYSQL_DATABASE=Spring_Security
+      - DATABASE_HOST=spring_security
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=root
+      - DATABASE_NAME=spring_security
+      - DATABASE_PORT=3306
+    restart: on-failure
+    depends_on:
+      - tododo-db
+    ports:
+      - 5055:5055
+
+  tododo-db:
+    restart: always
+    container_name: tododo-db
+    image: mysql
+    environment:
+      - MYSQL_DATABASE=spring_security
       - MYSQL_USER=root
-      - MYSQL_PASSWORD=
+      - MYSQL_PASSWORD=root
     ports:
       - 3306:3306
-
-  app:
-    image: aec41285ccd0
-        restart: on-failure
-        depends_on:
-          - myapp-mysql
-        ports:
-          - 8080:8080
-        environment:
-          - DATABASE_HOST=myapp-mysql
-          - DATABASE_USER=myapp-user
-          - DATABASE_PASSWORD=password
-          - DATABASE_NAME=MyAppDb
-          - DATABASE_PORT=3306
 
