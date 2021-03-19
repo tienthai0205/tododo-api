@@ -4,6 +4,7 @@
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/models/AuthenticationResponse.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/models/Note.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/models/Group.java
+/Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/models/MyUserDetails.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/services/MyUserDetailsService.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/controllers/HomeController.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/ApiApplication.java

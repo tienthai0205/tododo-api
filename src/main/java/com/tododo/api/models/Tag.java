@@ -10,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import org.springframework.data.jpa.repository.Query;
-
 @Entity
 @Table(name = "tag")
 public class Tag {

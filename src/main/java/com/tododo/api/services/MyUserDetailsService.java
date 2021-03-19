@@ -1,8 +1,9 @@
 package com.tododo.api.services;
 
-import java.util.ArrayList;
+import java.util.Optional;
 
 import com.tododo.api.models.AuthenticationRequest;
+import com.tododo.api.models.MyUserDetails;
 import com.tododo.api.models.UserEntity;
 import com.tododo.api.repositories.UserRepository;
 
@@ -23,16 +24,16 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByUsername(username);
+        Optional<UserEntity> user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-                new ArrayList<>());
+        return user.map(MyUserDetails::new).get();
+        // return new User(user.getUsername(), user.getPassword(), new ArrayList<>());
     }
 
     public UserEntity save(AuthenticationRequest user) {
-        UserEntity existingUser = userRepository.findByUsername(user.getUsername());
+        Optional<UserEntity> existingUser = userRepository.findByUsername(user.getUsername());
         if (existingUser != null) {
             return null;
         }
@@ -40,7 +41,7 @@ public class MyUserDetailsService implements UserDetailsService {
         newUser.setUsername(user.getUsername());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
         newUser.setActive(true);
-        newUser.setRole("user");
+        newUser.setRole("ROLE_USER");
         return userRepository.save(newUser);
     }
 

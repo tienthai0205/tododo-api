@@ -1,0 +1,2 @@
+INSERT into user (username, role, password, active) VALUES ('tienthai', 'ROLE_ADMIN', 'Tien12345', true)
+INSERT into user (username, role, password, active) VALUES ('maxmolewijk', 'ROLE_ADMIN', 'Max12345', true)
