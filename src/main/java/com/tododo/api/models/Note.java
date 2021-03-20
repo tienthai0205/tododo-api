@@ -24,7 +24,7 @@ public class Note extends BaseModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
     @JsonBackReference
     private UserEntity user;
@@ -53,7 +53,7 @@ public class Note extends BaseModel {
         this.id = id;
     }
 
-    public UserEntity getCreatedBy() {
+    public UserEntity getUser() {
         return this.user;
     }
 

@@ -25,7 +25,7 @@ public class Todo extends BaseModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
     @JsonBackReference
     private UserEntity user;

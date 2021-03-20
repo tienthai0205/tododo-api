@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "user")
@@ -33,12 +34,14 @@ public class UserEntity extends BaseModel {
     @Column
     private String role;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonFormat(shape = JsonFormat.Shape.ARRAY)
+    @JsonManagedReference()
     private Set<Todo> todoItems;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonFormat(shape = JsonFormat.Shape.ARRAY)
+    @JsonManagedReference()
     private Set<Note> notes;
 
     public int getId() {

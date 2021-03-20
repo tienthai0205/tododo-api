@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 public interface NoteRepository extends CrudRepository<Note, Integer> {
     Note findById(int id);
 
-    List<Note> findByUserId(int id);
+    List<Note> findByUserId(int userId);
 }
