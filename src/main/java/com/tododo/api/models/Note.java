@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "note")
@@ -35,8 +37,8 @@ public class Note extends BaseModel {
     private String content;
     // private Group group;
 
-    @ManyToMany
-    @JoinTable(name = "noteTag", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "note_id"))
+    @ManyToMany()
+    @JoinTable(name = "noteTag", joinColumns = @JoinColumn(name = "note_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags;
 
     // @ManyToMany
@@ -79,5 +81,9 @@ public class Note extends BaseModel {
 
     public Set<Tag> getTags() {
         return this.tags;
+    }
+
+    public void addTag(Tag tag) {
+        tags.add(tag);
     }
 }

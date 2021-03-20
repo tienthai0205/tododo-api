@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "todo")
@@ -51,6 +52,7 @@ public class Todo extends BaseModel {
 
     @ManyToMany
     @JoinTable(name = "todoTag", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "todo_id"))
+    @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     private Set<Tag> tags = new HashSet<>();
 
     public Todo() {
@@ -110,6 +112,10 @@ public class Todo extends BaseModel {
 
     public Set<Tag> getTags() {
         return this.tags;
+    }
+
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
     }
 
 }
