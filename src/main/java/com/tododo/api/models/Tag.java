@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "tag")
-public class Tag {
+public class Tag extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

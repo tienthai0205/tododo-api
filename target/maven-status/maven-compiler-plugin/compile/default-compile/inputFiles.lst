@@ -12,6 +12,7 @@
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/config/SecurityConfiguration.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/filters/JwtRequestFilter.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/repositories/UserRepository.java
+/Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/models/BaseModel.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/models/UserEntity.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/controllers/TodoController.java
 /Users/thaithuytien/Saxion/AAD/Backend/api/src/main/java/com/tododo/api/services/JwtUtil.java

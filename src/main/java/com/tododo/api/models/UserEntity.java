@@ -15,14 +15,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Entity
 @Table(name = "user")
-public class UserEntity {
+public class UserEntity extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

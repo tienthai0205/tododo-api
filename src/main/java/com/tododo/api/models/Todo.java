@@ -1,12 +1,12 @@
 package com.tododo.api.models;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "todo")
-public class Todo {
+public class Todo extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -35,11 +35,12 @@ public class Todo {
     @Column
     private String description;
     @Column
-    private float percentage;
+    private float percentage = 0.0f;
     @Column
     private long duration;
     @Column
     private Date dueDate;
+
     // private Group group;
 
     // @ManyToMany(fetch = FetchType.LAZY)
@@ -50,21 +51,9 @@ public class Todo {
 
     @ManyToMany
     @JoinTable(name = "todoTag", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "todo_id"))
-    private Set<Tag> tags;
+    private Set<Tag> tags = new HashSet<>();
 
     public Todo() {
-    }
-
-    public Todo(int id, UserEntity user, String title, String description, float percentage, long duration,
-            Date dueDate, Set<Tag> tags) {
-        this.id = id;
-        this.user = user;
-        this.title = title;
-        this.description = description;
-        this.percentage = percentage;
-        this.duration = duration;
-        this.dueDate = dueDate;
-        this.tags = tags;
     }
 
     public int getId() {
