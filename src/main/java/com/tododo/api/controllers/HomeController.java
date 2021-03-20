@@ -35,7 +35,7 @@ public class HomeController {
     @Autowired
     private MyUserDetailsService userDetailsService;
 
-    @GetMapping("hello")
+    @GetMapping("admin/hello")
     public ResponseEntity<?> hello() {
         return ResponseEntity.ok("Hello user!");
     }
