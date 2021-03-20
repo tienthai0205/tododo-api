@@ -33,11 +33,12 @@ public class UserEntity extends BaseModel {
     @Column
     private String role;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     private Set<Todo> todoItems;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     private Set<Note> notes;
 
     public int getId() {

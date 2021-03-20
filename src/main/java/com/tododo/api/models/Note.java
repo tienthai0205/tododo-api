@@ -2,8 +2,9 @@ package com.tododo.api.models;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,19 +14,25 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "note")
 public class Note extends BaseModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
+    @JsonBackReference
     private UserEntity user;
 
+    @Column
     private String title;
-    private String description;
+    @Column
+    private String content;
     // private Group group;
 
     @ManyToMany
@@ -34,13 +41,6 @@ public class Note extends BaseModel {
 
     // @ManyToMany
     // private Set<User> sharedWith;
-
-    public Note(UserEntity user, String title, String description, Set<Tag> tags) {
-        this.user = user;
-        this.title = title;
-        this.description = description;
-        this.tags = tags;
-    }
 
     public Note() {
     }
@@ -69,12 +69,12 @@ public class Note extends BaseModel {
         this.title = title;
     }
 
-    public String getDescription() {
-        return this.description;
+    public String getContent() {
+        return this.content;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public Set<Tag> getTags() {
