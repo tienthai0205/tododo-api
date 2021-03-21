@@ -100,6 +100,18 @@ public class NoteController {
 
     }
 
+    @GetMapping("/{id}/tags")
+    public ResponseEntity<?> getTags(Principal principal, @PathVariable int id) {
+        Note note = noteRepository.findById(id);
+        int userId = currentUser(principal).getId();
+        if (note.getUser().getId() != userId) {
+            return new ResponseEntity<>("You are not authorized to retrieved this item", HttpStatus.FORBIDDEN);
+        }
+        List<Tag> tags = tagRepository.findByNoteId(id, userId);
+
+        return ResponseEntity.ok(tags);
+    }
+
     private UserEntity currentUser(Principal principal) {
         UserEntity currentUser = userRepository.findByUsername(principal.getName());
         return currentUser;

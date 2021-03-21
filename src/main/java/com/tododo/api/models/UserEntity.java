@@ -1,5 +1,6 @@
 package com.tododo.api.models;
 
+import java.sql.Timestamp;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -44,6 +45,11 @@ public class UserEntity extends BaseModel {
     @JsonManagedReference()
     private Set<Note> notes;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonFormat(shape = JsonFormat.Shape.ARRAY)
+    @JsonManagedReference()
+    private Set<Tag> tags;
+
     public int getId() {
         return this.id;
     }
@@ -86,5 +92,21 @@ public class UserEntity extends BaseModel {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public Set<Note> getNotes() {
+        return notes;
+    }
+
+    public Set<Tag> getGroups() {
+        return groups;
+    }
+
+    public Set<Todo> getTodoItems() {
+        return todoItems;
     }
 }

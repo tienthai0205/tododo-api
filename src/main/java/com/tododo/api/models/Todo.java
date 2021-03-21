@@ -17,7 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "todo")
@@ -50,9 +49,8 @@ public class Todo extends BaseModel {
     // @Column(name = "user")
     // private Set<UserEntity> shareWith;
 
-    @ManyToMany
-    @JoinTable(name = "todoTag", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "todo_id"))
-    @JsonFormat(shape = JsonFormat.Shape.ARRAY)
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "todoTag", joinColumns = @JoinColumn(name = "todo_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags = new HashSet<>();
 
     public Todo() {

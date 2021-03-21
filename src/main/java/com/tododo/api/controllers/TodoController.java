@@ -3,8 +3,10 @@ package com.tododo.api.controllers;
 import java.security.Principal;
 import java.util.List;
 
+import com.tododo.api.models.Tag;
 import com.tododo.api.models.Todo;
 import com.tododo.api.models.UserEntity;
+import com.tododo.api.repositories.TagRepository;
 import com.tododo.api.repositories.TodoRepository;
 import com.tododo.api.repositories.UserRepository;
 
@@ -28,10 +30,12 @@ public class TodoController {
     private final TodoRepository todoRepository;
 
     private final UserRepository userRepository;
+    private final TagRepository tagRepository;
 
-    public TodoController(TodoRepository todoRepository, UserRepository userRepository) {
+    public TodoController(TodoRepository todoRepository, UserRepository userRepository, TagRepository tagRepository) {
         this.todoRepository = todoRepository;
         this.userRepository = userRepository;
+        this.tagRepository = tagRepository;
     }
 
     @GetMapping("")
@@ -98,6 +102,28 @@ public class TodoController {
         todoRepository.delete(todo);
 
         return ResponseEntity.ok("Your request has been successfully handled!");
+    }
+
+    @GetMapping("/{id}/tags")
+    public ResponseEntity<?> getTags(Principal principal, @PathVariable int id) {
+        Todo todo = todoRepository.findById(id);
+        int userId = currentUser(principal).getId();
+        if (todo.getUser().getId() != userId) {
+            return new ResponseEntity<>("You are not authorized to retrieved this item", HttpStatus.FORBIDDEN);
+        }
+        List<Tag> tags = tagRepository.findByTodoId(id, userId);
+
+        return ResponseEntity.ok(tags);
+    }
+
+    @PutMapping("/{id}/tag/{tagId}")
+    public ResponseEntity<?> addTagToNote(Principal principal, @PathVariable int id, @PathVariable int tagId) {
+        Todo todo = todoRepository.findById(id);
+        Tag tag = tagRepository.findById(tagId);
+        todo.addTag(tag);
+
+        return ResponseEntity.ok(todoRepository.save(todo));
+
     }
 
     private UserEntity currentUser(Principal principal) {
