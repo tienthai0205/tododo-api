@@ -23,5 +23,9 @@ public interface TagRepository extends CrudRepository<Tag, Integer> {
     @Query(value = "select * from tag t join todo_tag tt on tt.tag_id=t.id join todo tod on tt.todo_id=tod.id where tod.user_id=?1", nativeQuery = true)
     List<Tag> findTodoTagsByUser(int id);
 
+    @Query(value = "delete tt, nt from todo_tag tt join note_tag nt on tt.tag_id=nt.tag_id where tt.tag_id=?1", nativeQuery = true)
+    void deleteTagAssociation(int id);
+
     List<Tag> findByUserId(int id);
+
 }

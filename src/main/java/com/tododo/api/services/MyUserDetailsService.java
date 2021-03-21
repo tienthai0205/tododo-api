@@ -1,7 +1,5 @@
 package com.tododo.api.services;
 
-import java.util.Optional;
-
 import com.tododo.api.models.AuthenticationRequest;
 import com.tododo.api.models.MyUserDetails;
 import com.tododo.api.models.UserEntity;

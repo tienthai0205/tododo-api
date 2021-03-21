@@ -1,19 +1,17 @@
 package com.tododo.api.controllers;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.tododo.api.models.Note;
 import com.tododo.api.models.Tag;
 import com.tododo.api.models.UserEntity;
-import com.tododo.api.repositories.NoteRepository;
 import com.tododo.api.repositories.TagRepository;
 import com.tododo.api.repositories.UserRepository;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,14 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class TagController {
     private final TagRepository tagRepository;
 
-    private final NoteRepository noteRepository;
-
     private final UserRepository userRepository;
 
-    public TagController(TagRepository tagRepository, UserRepository userRepository, NoteRepository noteRepository) {
+    public TagController(TagRepository tagRepository, UserRepository userRepository) {
         this.tagRepository = tagRepository;
         this.userRepository = userRepository;
-        this.noteRepository = noteRepository;
     }
 
     @GetMapping("/all")
@@ -67,6 +62,38 @@ public class TagController {
         tagRepository.save(newTag);
         return new ResponseEntity<>(newTag, HttpStatus.CREATED);
 
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editTag(Principal principal, @PathVariable int id, @RequestBody Tag updatetag) {
+        Tag tag = tagRepository.findById(id);
+        if (tag == null) {
+            return new ResponseEntity<>("Tag with id " + id + " not found", HttpStatus.NOT_FOUND);
+        }
+        if (tag.getUser().getId() != currentUser(principal).getId()) {
+            return new ResponseEntity<>("You are not authorized to retrieved this item", HttpStatus.FORBIDDEN);
+        }
+        tag.setTitle(updatetag.getTitle());
+        tag.setDescription(updatetag.getDescription());
+
+        return ResponseEntity.ok("Your request has been successfully handled!");
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> removeTag(Principal principal, @PathVariable int id) {
+        Tag tag = tagRepository.findById(id);
+        if (tag == null) {
+            return new ResponseEntity<>("Tag with id " + id + " not found", HttpStatus.NOT_FOUND);
+        }
+        if (tag.getUser().getId() != currentUser(principal).getId()) {
+            return new ResponseEntity<>("You are not authorized to retrieved this item", HttpStatus.FORBIDDEN);
+        }
+
+        // tagRepository.deleteTagAssociation(id);
+        tagRepository.delete(tag);
+
+        return ResponseEntity.ok("Your request has been successfully handled!");
     }
 
     private UserEntity currentUser(Principal principal) {

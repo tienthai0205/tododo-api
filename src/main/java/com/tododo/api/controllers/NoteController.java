@@ -1,12 +1,8 @@
 package com.tododo.api.controllers;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
-import com.jayway.jsonpath.Option;
 import com.tododo.api.models.Note;
 import com.tododo.api.models.Tag;
 import com.tododo.api.models.UserEntity;
@@ -14,13 +10,11 @@ import com.tododo.api.repositories.NoteRepository;
 import com.tododo.api.repositories.TagRepository;
 import com.tododo.api.repositories.UserRepository;
 
-import org.hibernate.mapping.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;

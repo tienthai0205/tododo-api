@@ -1,6 +1,5 @@
 package com.tododo.api.models;
 
-import java.sql.Timestamp;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
