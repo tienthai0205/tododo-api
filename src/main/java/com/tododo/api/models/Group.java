@@ -2,13 +2,17 @@ package com.tododo.api.models;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "`group`")
@@ -21,25 +25,22 @@ public class Group extends BaseModel {
     @Column
     private String description;
 
-    @ManyToMany(mappedBy = "groups")
-    private Set<UserEntity> members;
-
-    public Group(String name, Set<UserEntity> members) {
-        this.name = name;
-        this.members = members;
-        // this.notes = notes;
-        // this.items = items;
-    }
+    @OneToMany(mappedBy = "group", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "usergroup-group")
+    private Set<UserGroup> userGroups;
 
     public Group() {
     }
 
-    public int getId() {
-        return this.id;
+    public Group(int id, String name, String description, Set<UserGroup> userGroups) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.userGroups = userGroups;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getId() {
+        return this.id;
     }
 
     public String getName() {
@@ -50,8 +51,16 @@ public class Group extends BaseModel {
         this.name = name;
     }
 
-    public Set<UserEntity> getMembers() {
-        return this.members;
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<UserGroup> getUserGroups() {
+        return userGroups;
     }
 
 }

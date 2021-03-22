@@ -9,9 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -53,9 +50,9 @@ public class UserEntity extends BaseModel {
         return this.id;
     }
 
-    @ManyToMany
-    @JoinTable(name = "userGroup", joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<Tag> groups;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "usergroup-user")
+    private Set<UserGroup> userGroups;
 
     public String getUsername() {
         return this.username;
@@ -101,11 +98,11 @@ public class UserEntity extends BaseModel {
         return notes;
     }
 
-    public Set<Tag> getGroups() {
-        return groups;
-    }
-
     public Set<Todo> getTodoItems() {
         return todoItems;
+    }
+
+    public Set<UserGroup> getUserGroups() {
+        return userGroups;
     }
 }
