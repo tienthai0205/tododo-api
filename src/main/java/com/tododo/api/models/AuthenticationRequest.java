@@ -4,6 +4,7 @@ public class AuthenticationRequest {
 
     public String username;
     private String password;
+    private String displayName;
 
     public AuthenticationRequest() {
     }
@@ -27,6 +28,14 @@ public class AuthenticationRequest {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
 }

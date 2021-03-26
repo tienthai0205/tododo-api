@@ -30,6 +30,8 @@ public class UserEntity extends BaseModel {
     private boolean active;
     @Column
     private String role;
+    @Column
+    private String name;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonFormat(shape = JsonFormat.Shape.ARRAY)
@@ -60,6 +62,14 @@ public class UserEntity extends BaseModel {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {

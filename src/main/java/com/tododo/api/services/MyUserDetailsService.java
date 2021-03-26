@@ -39,6 +39,7 @@ public class MyUserDetailsService implements UserDetailsService {
         newUser.setUsername(user.getUsername());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
         newUser.setActive(true);
+        newUser.setName(user.getDisplayName());
         newUser.setRole("ROLE_USER");
         return userRepository.save(newUser);
     }

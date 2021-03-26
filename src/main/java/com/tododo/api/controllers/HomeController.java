@@ -63,7 +63,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<?> saveUser(@RequestBody AuthenticationRequest user) throws Exception {
+    public ResponseEntity<?> saveUser(@RequestBody AuthenticationRequest user) {
         UserEntity newUser = userDetailsService.save(user);
         if (newUser == null) {
             return new ResponseEntity<>("User with that username already exists!", HttpStatus.BAD_REQUEST);
