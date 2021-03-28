@@ -44,7 +44,7 @@ public class HomeController {
         return ResponseEntity.ok("Hello user!");
     }
 
-    @GetMapping("/users")
+    @GetMapping("/admin/users")
     public ResponseEntity<?> getUserList() {
         return ResponseEntity.ok(userRepository.findAll());
     }
