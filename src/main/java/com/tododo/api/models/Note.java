@@ -2,8 +2,9 @@ package com.tododo.api.models;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,34 +14,33 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "note")
-public class Note {
+public class Note extends BaseModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne()
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
+    @JsonBackReference
     private UserEntity user;
 
+    @Column
     private String title;
-    private String description;
+    @Column
+    private String content;
     // private Group group;
 
-    @ManyToMany
-    @JoinTable(name = "noteTag", joinColumns = @JoinColumn(name = "tag_id"), inverseJoinColumns = @JoinColumn(name = "note_id"))
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "noteTag", joinColumns = @JoinColumn(name = "note_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags;
 
     // @ManyToMany
     // private Set<User> sharedWith;
-
-    public Note(UserEntity user, String title, String description, Set<Tag> tags) {
-        this.user = user;
-        this.title = title;
-        this.description = description;
-        this.tags = tags;
-    }
 
     public Note() {
     }
@@ -53,7 +53,7 @@ public class Note {
         this.id = id;
     }
 
-    public UserEntity getCreatedBy() {
+    public UserEntity getUser() {
         return this.user;
     }
 
@@ -69,15 +69,19 @@ public class Note {
         this.title = title;
     }
 
-    public String getDescription() {
-        return this.description;
+    public String getContent() {
+        return this.content;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public Set<Tag> getTags() {
         return this.tags;
+    }
+
+    public void addTag(Tag tag) {
+        tags.add(tag);
     }
 }

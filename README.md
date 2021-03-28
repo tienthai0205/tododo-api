@@ -5,6 +5,13 @@ To start up the server:
 ```bash
 ./mvnw spring-boot:run
 ```
+
+To run all the test:
+
+```
+./mvnw test
+```
+
 Swagger documentation could be found at:
 
 `http://localhost:5055/v2/api-docs` - swagger2 raw json version
@@ -86,3 +93,5 @@ Swagger documentation could be found at:
         200 OK 
         Hello user!
         ```
+
+

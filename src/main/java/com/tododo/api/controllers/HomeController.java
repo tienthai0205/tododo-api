@@ -3,6 +3,7 @@ package com.tododo.api.controllers;
 import com.tododo.api.models.AuthenticationRequest;
 import com.tododo.api.models.AuthenticationResponse;
 import com.tododo.api.models.UserEntity;
+import com.tododo.api.repositories.UserRepository;
 import com.tododo.api.services.JwtUtil;
 import com.tododo.api.services.MyUserDetailsService;
 
@@ -35,9 +36,17 @@ public class HomeController {
     @Autowired
     private MyUserDetailsService userDetailsService;
 
-    @GetMapping("hello")
+    @Autowired
+    private UserRepository userRepository;
+
+    @GetMapping("/admin/hello")
     public ResponseEntity<?> hello() {
         return ResponseEntity.ok("Hello user!");
+    }
+
+    @GetMapping("/admin/users")
+    public ResponseEntity<?> getUserList() {
+        return ResponseEntity.ok(userRepository.findAll());
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
@@ -54,7 +63,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<?> saveUser(@RequestBody AuthenticationRequest user) throws Exception {
+    public ResponseEntity<?> saveUser(@RequestBody AuthenticationRequest user) {
         UserEntity newUser = userDetailsService.save(user);
         if (newUser == null) {
             return new ResponseEntity<>("User with that username already exists!", HttpStatus.BAD_REQUEST);

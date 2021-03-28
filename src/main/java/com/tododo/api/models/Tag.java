@@ -2,17 +2,24 @@ package com.tododo.api.models;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tag")
-public class Tag {
+public class Tag extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -20,14 +27,19 @@ public class Tag {
     private String title;
     private String description;
 
-    @ManyToMany(mappedBy = "tags")
+    @JsonIgnore
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Set<Todo> todoItems;
 
-    @ManyToMany(mappedBy = "tags")
+    @JsonIgnore
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
     private Set<Note> notes;
 
     // @Query(value = "select * user_id from note where note.id=")
-    // private UserEntity user;
+    @ManyToOne()
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
+    @JsonBackReference
+    private UserEntity user;
 
     public Tag() {
     }
@@ -66,6 +78,22 @@ public class Tag {
 
     public Set<Note> getNotes() {
         return this.notes;
+    }
+
+    public void addNote(Note note) {
+        this.notes.add(note);
+    }
+
+    public void addTodo(Todo todo) {
+        this.todoItems.add(todo);
+    }
+
+    public UserEntity getUser() {
+        return this.user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
 }

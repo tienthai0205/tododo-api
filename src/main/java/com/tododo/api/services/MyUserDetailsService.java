@@ -1,7 +1,5 @@
 package com.tododo.api.services;
 
-import java.util.Optional;
-
 import com.tododo.api.models.AuthenticationRequest;
 import com.tododo.api.models.MyUserDetails;
 import com.tododo.api.models.UserEntity;
@@ -24,16 +22,16 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserEntity> user = userRepository.findByUsername(username);
+        UserEntity user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
-        return user.map(MyUserDetails::new).get();
+        return new MyUserDetails(user);
         // return new User(user.getUsername(), user.getPassword(), new ArrayList<>());
     }
 
     public UserEntity save(AuthenticationRequest user) {
-        Optional<UserEntity> existingUser = userRepository.findByUsername(user.getUsername());
+        UserEntity existingUser = userRepository.findByUsername(user.getUsername());
         if (existingUser != null) {
             return null;
         }
@@ -41,6 +39,7 @@ public class MyUserDetailsService implements UserDetailsService {
         newUser.setUsername(user.getUsername());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
         newUser.setActive(true);
+        newUser.setName(user.getDisplayName());
         newUser.setRole("ROLE_USER");
         return userRepository.save(newUser);
     }
