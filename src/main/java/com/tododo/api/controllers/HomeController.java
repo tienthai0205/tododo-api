@@ -1,8 +1,6 @@
 package com.tododo.api.controllers;
 
-import com.tododo.api.models.AuthenticationRequest;
-import com.tododo.api.models.AuthenticationResponse;
-import com.tododo.api.models.UserEntity;
+import com.tododo.api.models.*;
 import com.tododo.api.repositories.UserRepository;
 import com.tododo.api.services.JwtUtil;
 import com.tododo.api.services.MyUserDetailsService;
@@ -10,17 +8,9 @@ import com.tododo.api.services.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
