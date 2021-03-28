@@ -40,13 +40,24 @@ public class UserEntity extends BaseModel {
     @JsonManagedReference()
     private Set<Tag> tags;
 
-    public int getId() {
-        return this.id;
-    }
-
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonManagedReference(value = "usergroup-user")
     private Set<UserGroup> userGroups;
+
+    public UserEntity() {
+    }
+
+    public UserEntity(String username, String name, String password, String role, boolean active) {
+        this.username = username;
+        this.name = name;
+        this.password = password;
+        this.role = role;
+        this.active = active;
+    }
+
+    public int getId() {
+        return this.id;
+    }
 
     public String getUsername() {
         return this.username;
