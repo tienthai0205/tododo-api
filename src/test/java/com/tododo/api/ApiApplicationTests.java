@@ -1,6 +1,5 @@
 package com.tododo.api;
 
-import com.tododo.api.controllers.HomeController;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -21,9 +20,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @SpringBootTest
 class ApiApplicationTests {
-
-	@Autowired
-	private HomeController homeController;
 
 	private MockMvc mockMvc;
 
