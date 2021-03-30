@@ -11,14 +11,10 @@ services:
 
 before_script:
   - docker info
-  - apk update
-  - apk upgrade
-  - apk add curl jq python3 python3-dev build-base libffi-dev libressl-dev gettext
-  - curl -O https://bootstrap.pypa.io/get-pip.py
-  - python3 get-pip.py
-  - pip install docker-compose
+  - apk add --no-cache docker-compose
+  - docker-compose info
 
 build image:
   stage: build
   script:
-    - docker-compose up
+    - docker-compose build
