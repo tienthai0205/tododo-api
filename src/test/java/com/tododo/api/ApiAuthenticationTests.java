@@ -5,10 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -16,13 +20,20 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import java.util.Optional;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tododo.api.models.AuthenticationRequest;
 import com.tododo.api.models.UserEntity;
 import com.tododo.api.repositories.UserRepository;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
+@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
+@AutoConfigureTestDatabase(replace = Replace.ANY)
 public class ApiAuthenticationTests {
 
     private MockMvc mockMvc;
@@ -57,7 +68,9 @@ public class ApiAuthenticationTests {
         UserEntity newUser = userRepository.findByUsername("test@email.com");
         assertEquals(200, result.getResponse().getStatus());
         assertEquals("Test User1", newUser.getName());
-        userRepository.delete(newUser); // clean up everytime testuser is added
+        System.out.println(userRepository.findAll());
+        // userRepository.delete(newUser);
+        // clean up everytime testuser is added
     }
 
     // @Test
@@ -91,7 +104,9 @@ public class ApiAuthenticationTests {
     void testAuthenticateUser() throws Exception {
 
         AuthenticationRequest request = new AuthenticationRequest();
-        request.setUsername("tien@saxion.nl");
+
+        // userRepository.deleteAll();
+        request.setUsername("tien@email.com");
         request.setPassword("Tien12345");
         String jsonRequest = mapper.writeValueAsString(request);
         MvcResult result = mockMvc
