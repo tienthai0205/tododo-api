@@ -1,0 +1,3 @@
+INSERT into user (created_date, modified_date, username, name, role, password, active) VALUES ('2021-03-26 02:22:40', '2021-03-26 02:22:40', 'tien@email.com', 'Tien Thai', 'ROLE_ADMIN', '$2a$10$0kkdU9Zb5AbFDZdIdIUViuOTQ.9IDqt2tCAFoTFOkgsREXuC5aZwi', true)
+INSERT into user (created_date, modified_date, username, name, role, password, active) VALUES ('2021-03-26 02:22:40', '2021-03-26 02:22:40', 'max@email.com', 'Max Molewijk', 'ROLE_ADMIN', '$2a$10$rKV19L3XIqPolXME8ZpzTOlKFqd/j6NZIdWQVcObjSGbdb8rVR7yi', true)
+INSERT into user (created_date, modified_date, username, name, role, password, active) VALUES ('2021-03-26 02:22:40', '2021-03-26 02:22:40', 'user@email.com', 'User 1 ', 'ROLE_USER', '$2y$12$A9.6oLQyixQ8Ufh9SBk2zOqr6vtyKlehA4q0w2wwXuzjyw0LHuTQu', true)

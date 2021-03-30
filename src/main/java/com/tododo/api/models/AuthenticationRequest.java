@@ -9,9 +9,10 @@ public class AuthenticationRequest {
     public AuthenticationRequest() {
     }
 
-    public AuthenticationRequest(String username, String password) {
+    public AuthenticationRequest(String username, String password, String displayName) {
         this.username = username;
         this.password = password;
+        this.displayName = displayName;
     }
 
     public String getPassword() {

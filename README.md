@@ -27,10 +27,16 @@ Swagger documentation could be found at:
 
         ```java
         {
-        	"username":"tienthai",
+        	"username":"tien@email.com",
         	"password": "Tien12345"
         }
         ```
+
+        Test user in the seed database are:
+
+        - username: tien@email.com, password: Tien12345 (admin)
+        - username: max@email.com, password: Max12345 (admin)
+        - username: user@email.com, password: User12345 (user)
 
         Login Url: POST `http://localhost:5055/api/authenticate`
 

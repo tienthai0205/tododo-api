@@ -2,15 +2,7 @@ package com.tododo.api.models;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -48,13 +40,24 @@ public class UserEntity extends BaseModel {
     @JsonManagedReference()
     private Set<Tag> tags;
 
-    public int getId() {
-        return this.id;
-    }
-
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonManagedReference(value = "usergroup-user")
     private Set<UserGroup> userGroups;
+
+    public UserEntity() {
+    }
+
+    public UserEntity(String username, String name, String password, String role, boolean active) {
+        this.username = username;
+        this.name = name;
+        this.password = password;
+        this.role = role;
+        this.active = active;
+    }
+
+    public int getId() {
+        return this.id;
+    }
 
     public String getUsername() {
         return this.username;

@@ -1,0 +1,26 @@
+image: docker:latest
+
+stages:
+  - build
+  - test
+
+variables:
+  DOCKER_DRIVER: overlay
+
+services:
+  - docker:dind
+
+build app:
+  stage: build
+  script:
+    - apk add --no-cache docker-compose
+    - docker-compose version
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker-compose build 
+    - docker push registry.gitlab.com/tienthai460592/tododoapi-backup/tododo-pipeline:latest
+
+spring test:
+  stage: test
+  image: maven:3.5.2-jdk-8-alpine 
+  script:
+    - mvn test
