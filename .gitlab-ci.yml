@@ -12,15 +12,16 @@ services:
 
 before_script:
   - docker info
-  - apk add --no-cache docker-compose
-  - docker-compose version
 
 build app:
   stage: build
   script:
+    - apk add --no-cache docker-compose
+    - docker-compose version
     - docker-compose build
 
 spring test:
   stage: test
+  image: maven:3.6-jdk-11
   script:
-    - ./mvnw test
+    - mvn test
