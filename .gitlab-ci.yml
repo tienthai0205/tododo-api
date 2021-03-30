@@ -15,7 +15,9 @@ build app:
   script:
     - apk add --no-cache docker-compose
     - docker-compose version
-    - docker-compose build
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker-compose build -t registry.gitlab.com/tododoapi-backup/tododo-pipeline:latest .
+    - docker push registry.gitlab.com/tododoapi-backup/tododo-pipeline:latest
 
 spring test:
   stage: test
