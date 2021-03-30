@@ -10,9 +10,6 @@ variables:
 services:
   - docker:dind
 
-before_script:
-  - docker info
-
 build app:
   stage: build
   script:
@@ -22,6 +19,6 @@ build app:
 
 spring test:
   stage: test
-  image: maven:3.6-jdk-11
+  image: maven:3.5.2-jdk-8-alpine 
   script:
     - mvn test
