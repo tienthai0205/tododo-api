@@ -1,5 +1,7 @@
 image: docker:stable
 
+stages:
+  - build
 services:
   - docker:dind
 
@@ -10,4 +12,4 @@ before_script:
 build image:
   stage: build
   script:
-    - docker-compose build
+    - docker-compose up
