@@ -1,4 +1,4 @@
-image: docker/compose:stable
+image: docker:stable
 
 stages:
   - build
@@ -7,7 +7,6 @@ services:
 
 before_script:
   - docker info
-  - docker-compose --version
 
 build image:
   stage: build
