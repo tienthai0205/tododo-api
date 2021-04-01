@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -40,9 +41,9 @@ public class UserEntity extends BaseModel {
     @JsonManagedReference()
     private Set<Tag> tags;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "usergroup-user")
-    private Set<UserGroup> userGroups;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    private Set<Group> groups;
 
     public UserEntity() {
     }
@@ -115,7 +116,7 @@ public class UserEntity extends BaseModel {
         return todoItems;
     }
 
-    public Set<UserGroup> getUserGroups() {
-        return userGroups;
+    public Set<Group> getGroups() {
+        return groups;
     }
 }
