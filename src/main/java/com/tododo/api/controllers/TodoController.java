@@ -116,6 +116,15 @@ public class TodoController {
 
     }
 
+    @PutMapping("/{id}/tag/{tagId}")
+    public ResponseEntity<?> removeTagFromTodo(Principal principal, @PathVariable int id, @PathVariable int tagId) {
+        Todo todo = todoRepository.findById(id);
+        Tag tag = tagRepository.findById(tagId);
+        todo.removeTag(tag);
+
+        return ResponseEntity.ok("Your request has been successfully handled!");
+    }
+
     private UserEntity currentUser(Principal principal) {
         UserEntity currentUser = userRepository.findByUsername(principal.getName());
         return currentUser;

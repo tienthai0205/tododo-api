@@ -82,6 +82,15 @@ public class NoteController {
 
     }
 
+    @DeleteMapping("/{noteId}/tag/{tagId}")
+    public ResponseEntity<?> removeTagFromNote(Principal principal, @PathVariable int noteId, @PathVariable int tagId) {
+        Note note = noteRepository.findById(noteId);
+        Tag tag = tagRepository.findById(tagId);
+        note.removeTag(tag);
+
+        return ResponseEntity.ok("Your request has been successfully handled!");
+    }
+
     @GetMapping("/{id}/tags")
     public ResponseEntity<?> getTags(Principal principal, @PathVariable int id) {
         Note note = noteRepository.findById(id);

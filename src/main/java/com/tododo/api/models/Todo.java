@@ -106,4 +106,8 @@ public class Todo extends BaseModel {
         this.tags.add(tag);
     }
 
+    public void removeTag(Tag tag) {
+        tags.remove(tag);
+    }
+
 }
