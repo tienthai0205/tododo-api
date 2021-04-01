@@ -116,7 +116,7 @@ public class TodoController {
 
     }
 
-    @PutMapping("/{id}/tag/{tagId}")
+    @DeleteMapping("/{id}/tag/{tagId}")
     public ResponseEntity<?> removeTagFromTodo(Principal principal, @PathVariable int id, @PathVariable int tagId) {
         Todo todo = todoRepository.findById(id);
         Tag tag = tagRepository.findById(tagId);
