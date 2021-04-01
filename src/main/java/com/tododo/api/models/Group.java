@@ -65,4 +65,8 @@ public class Group extends BaseModel {
     public void addMember(UserEntity member) {
         this.users.add(member);
     }
+
+    public void removeMember(UserEntity member) {
+        this.users.remove(member);
+    }
 }
