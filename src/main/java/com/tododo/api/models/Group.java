@@ -1,10 +1,9 @@
 package com.tododo.api.models;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "`group`")
@@ -16,19 +15,19 @@ public class Group extends BaseModel {
     private String name;
     @Column
     private String description;
+    @Column
+    private GroupTypeEnum type;
 
-    @OneToMany(mappedBy = "group", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "usergroup-group")
-    private Set<UserGroup> userGroups;
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "groupUser", joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<UserEntity> users = new HashSet<>();
 
     public Group() {
     }
 
-    public Group(int id, String name, String description, Set<UserGroup> userGroups) {
-        this.id = id;
+    public Group(String name, String description) {
         this.name = name;
         this.description = description;
-        this.userGroups = userGroups;
     }
 
     public int getId() {
@@ -51,8 +50,19 @@ public class Group extends BaseModel {
         this.description = description;
     }
 
-    public Set<UserGroup> getUserGroups() {
-        return userGroups;
+    public Set<UserEntity> getUsers() {
+        return users;
     }
 
+    public GroupTypeEnum getType() {
+        return type;
+    }
+
+    public void setType(GroupTypeEnum type) {
+        this.type = type;
+    }
+
+    public void addMember(UserEntity member) {
+        this.users.add(member);
+    }
 }

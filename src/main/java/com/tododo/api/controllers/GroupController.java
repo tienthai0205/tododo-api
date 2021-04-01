@@ -14,13 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/groups")
 public class GroupController {
     private final GroupRepository groupRepository;
-    private final UserGroupRepository userGroupRepository;
     private final UserRepository userRepository;
 
-    public GroupController(GroupRepository groupRepository, UserGroupRepository userGroupRepository,
-            UserRepository userRepository) {
+    public GroupController(GroupRepository groupRepository, UserRepository userRepository) {
         this.groupRepository = groupRepository;
-        this.userGroupRepository = userGroupRepository;
         this.userRepository = userRepository;
     }
 
@@ -45,9 +42,14 @@ public class GroupController {
 
     @RequestMapping(value = "", consumes = { "application/json" }, method = RequestMethod.POST)
     public ResponseEntity<?> addGroup(@RequestBody Group newGroup, Principal principal) {
+        Group memberGroup = new Group(newGroup.getName(), newGroup.getDescription());
+        memberGroup.setType(GroupTypeEnum.GROUP_MEMBER);
+        newGroup.setType(GroupTypeEnum.GROUP_ADMIN);
         groupRepository.save(newGroup);
-        userGroupRepository.save(new UserGroup(currentUser(principal), newGroup, "ADMIN"));
-        return new ResponseEntity<>(newGroup, HttpStatus.CREATED);
+        groupRepository.save(memberGroup);
+
+        newGroup.addMember(currentUser(principal));
+        return new ResponseEntity<>(groupRepository.save(newGroup), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}/members/{userId}")
@@ -60,8 +62,8 @@ public class GroupController {
         if (newMember == null) {
             return new ResponseEntity<>("User with id " + id + " not found", HttpStatus.NOT_FOUND);
         }
-        UserGroup userGroup = new UserGroup(newMember, group, "MEMBER");
-        return ResponseEntity.ok(userGroupRepository.save(userGroup));
+        group.addMember(newMember);
+        return ResponseEntity.ok(groupRepository.save(group));
     }
 
     @DeleteMapping("/{id}")
