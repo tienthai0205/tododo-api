@@ -51,6 +51,13 @@ public class Todo extends BaseModel {
         this.description = description;
     }
 
+    public Todo(String title, String description, long duration, float percentage) {
+        this.title = title;
+        this.description = description;
+        this.duration = duration;
+        this.percentage = percentage;
+    }
+
     public int getId() {
         return this.id;
     }

@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.tododo.api.ApiNoteTests
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.436 s <<< FAILURE! - in com.tododo.api.ApiNoteTests
-getNotesForUser  Time elapsed: 0.112 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <[]> but was: <[{"createdDate":"2021-04-02T20:47:06.979+00:00","modifiedDate":"2021-04-02T20:47:06.979+00:00","id":1,"title":"Note1","content":"Test note1","tags":[]},{"createdDate":"2021-04-02T20:47:07.075+00:00","modifiedDate":"2021-04-02T20:47:07.075+00:00","id":2,"title":"Note1","content":"Test note1","tags":[]}]>
-	at com.tododo.api.ApiNoteTests.getNotesForUser(ApiNoteTests.java:62)
-
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.74 s - in com.tododo.api.ApiNoteTests

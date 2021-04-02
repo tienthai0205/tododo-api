@@ -39,12 +39,12 @@ public class TodoController {
     @GetMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;?&gt; getTodoItem(Principal principal, @PathVariable int id) {
 <span class="fc" id="L41">        Todo todo = todoRepository.findById(id);</span>
-<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        if (todo == null) {</span>
-<span class="nc" id="L43">            return new ResponseEntity&lt;&gt;(&quot;Todo item with id &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND);</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (todo == null) {</span>
+<span class="fc" id="L43">            return new ResponseEntity&lt;&gt;(&quot;Todo item with id &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND);</span>
         }
 
-<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        if (todo.getUser().getId() != currentUser(principal).getId()) {</span>
-<span class="nc" id="L47">            return new ResponseEntity&lt;&gt;(&quot;You are not authorized to retrieved this item&quot;, HttpStatus.FORBIDDEN);</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (todo.getUser().getId() != currentUser(principal).getId()) {</span>
+<span class="fc" id="L47">            return new ResponseEntity&lt;&gt;(&quot;You are not authorized to retrieved this item&quot;, HttpStatus.FORBIDDEN);</span>
         }
 
 <span class="fc" id="L50">        return ResponseEntity.ok(todo);</span>
@@ -60,34 +60,34 @@ public class TodoController {
 
     @PutMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;?&gt; updateTodoItem(Principal principal, @PathVariable int id, @RequestBody Todo updateTodo) {
-<span class="nc" id="L63">        Todo todo = todoRepository.findById(id);</span>
+<span class="fc" id="L63">        Todo todo = todoRepository.findById(id);</span>
 
-<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (todo == null) {</span>
-<span class="nc" id="L66">            return new ResponseEntity&lt;&gt;(&quot;Todo item with id &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND);</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (todo == null) {</span>
+<span class="fc" id="L66">            return new ResponseEntity&lt;&gt;(&quot;Todo item with id &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND);</span>
         }
 
-<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (todo.getUser().getId() != currentUser(principal).getId()) {</span>
-<span class="nc" id="L70">            return new ResponseEntity&lt;&gt;(&quot;You are not authorized to retrieved this item&quot;, HttpStatus.FORBIDDEN);</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (todo.getUser().getId() != currentUser(principal).getId()) {</span>
+<span class="fc" id="L70">            return new ResponseEntity&lt;&gt;(&quot;You are not authorized to retrieved this item&quot;, HttpStatus.FORBIDDEN);</span>
         }
 
         // TODO: Find a more generic or smart way to handle this
-<span class="nc" id="L74">        todo.setTitle(updateTodo.getTitle());</span>
-<span class="nc" id="L75">        todo.setDescription(updateTodo.getDescription());</span>
-<span class="nc" id="L76">        todo.setDuration(updateTodo.getDuration());</span>
-<span class="nc" id="L77">        todo.setPercentage(updateTodo.getPercentage());</span>
-<span class="nc" id="L78">        return ResponseEntity.ok(todo);</span>
+<span class="fc" id="L74">        todo.setTitle(updateTodo.getTitle());</span>
+<span class="fc" id="L75">        todo.setDescription(updateTodo.getDescription());</span>
+<span class="fc" id="L76">        todo.setDuration(updateTodo.getDuration());</span>
+<span class="fc" id="L77">        todo.setPercentage(updateTodo.getPercentage());</span>
+<span class="fc" id="L78">        return ResponseEntity.ok(todo);</span>
 
     }
 
     @DeleteMapping(&quot;/{id}&quot;)
-    public ResponseEntity&lt;?&gt; updateTodoItem(Principal principal, @PathVariable int id) {
+    public ResponseEntity&lt;?&gt; deleteTodoItem(Principal principal, @PathVariable int id) {
 <span class="fc" id="L84">        Todo todo = todoRepository.findById(id);</span>
-<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        if (todo == null) {</span>
-<span class="nc" id="L86">            return new ResponseEntity&lt;&gt;(&quot;Todo item with id &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND);</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (todo == null) {</span>
+<span class="fc" id="L86">            return new ResponseEntity&lt;&gt;(&quot;Todo item with id &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND);</span>
         }
 
-<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if (todo.getUser().getId() != currentUser(principal).getId()) {</span>
-<span class="nc" id="L90">            return new ResponseEntity&lt;&gt;(&quot;You are not authorized to retrieved this item&quot;, HttpStatus.FORBIDDEN);</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (todo.getUser().getId() != currentUser(principal).getId()) {</span>
+<span class="fc" id="L90">            return new ResponseEntity&lt;&gt;(&quot;You are not authorized to retrieved this item&quot;, HttpStatus.FORBIDDEN);</span>
         }
 <span class="fc" id="L92">        todoRepository.delete(todo);</span>
 
@@ -96,33 +96,33 @@ public class TodoController {
 
     @GetMapping(&quot;/{id}/tags&quot;)
     public ResponseEntity&lt;?&gt; getTags(Principal principal, @PathVariable int id) {
-<span class="nc" id="L99">        Todo todo = todoRepository.findById(id);</span>
-<span class="nc" id="L100">        int userId = currentUser(principal).getId();</span>
-<span class="nc bnc" id="L101" title="All 2 branches missed.">        if (todo.getUser().getId() != userId) {</span>
-<span class="nc" id="L102">            return new ResponseEntity&lt;&gt;(&quot;You are not authorized to retrieved this item&quot;, HttpStatus.FORBIDDEN);</span>
+<span class="fc" id="L99">        Todo todo = todoRepository.findById(id);</span>
+<span class="fc" id="L100">        int userId = currentUser(principal).getId();</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (todo.getUser().getId() != userId) {</span>
+<span class="fc" id="L102">            return new ResponseEntity&lt;&gt;(&quot;You are not authorized to retrieved this item&quot;, HttpStatus.FORBIDDEN);</span>
         }
-<span class="nc" id="L104">        List&lt;Tag&gt; tags = tagRepository.findByTodoId(id, userId);</span>
+<span class="fc" id="L104">        List&lt;Tag&gt; tags = tagRepository.findByTodoId(id, userId);</span>
 
-<span class="nc" id="L106">        return ResponseEntity.ok(tags);</span>
+<span class="fc" id="L106">        return ResponseEntity.ok(tags);</span>
     }
 
     @PutMapping(&quot;/{id}/tag/{tagId}&quot;)
-    public ResponseEntity&lt;?&gt; addTagToNote(Principal principal, @PathVariable int id, @PathVariable int tagId) {
-<span class="nc" id="L111">        Todo todo = todoRepository.findById(id);</span>
-<span class="nc" id="L112">        Tag tag = tagRepository.findById(tagId);</span>
-<span class="nc" id="L113">        todo.addTag(tag);</span>
+    public ResponseEntity&lt;?&gt; addTagToTodo(Principal principal, @PathVariable int id, @PathVariable int tagId) {
+<span class="fc" id="L111">        Todo todo = todoRepository.findById(id);</span>
+<span class="fc" id="L112">        Tag tag = tagRepository.findById(tagId);</span>
+<span class="fc" id="L113">        todo.addTag(tag);</span>
 
-<span class="nc" id="L115">        return ResponseEntity.ok(todoRepository.save(todo));</span>
+<span class="fc" id="L115">        return ResponseEntity.ok(todoRepository.save(todo));</span>
 
     }
 
     @DeleteMapping(&quot;/{id}/tag/{tagId}&quot;)
     public ResponseEntity&lt;?&gt; removeTagFromTodo(Principal principal, @PathVariable int id, @PathVariable int tagId) {
-<span class="nc" id="L121">        Todo todo = todoRepository.findById(id);</span>
-<span class="nc" id="L122">        Tag tag = tagRepository.findById(tagId);</span>
-<span class="nc" id="L123">        todo.removeTag(tag);</span>
+<span class="fc" id="L121">        Todo todo = todoRepository.findById(id);</span>
+<span class="fc" id="L122">        Tag tag = tagRepository.findById(tagId);</span>
+<span class="fc" id="L123">        todo.removeTag(tag);</span>
 
-<span class="nc" id="L125">        return ResponseEntity.ok(&quot;Your request has been successfully handled!&quot;);</span>
+<span class="fc" id="L125">        return ResponseEntity.ok(&quot;Your request has been successfully handled!&quot;);</span>
     }
 
     private UserEntity currentUser(Principal principal) {

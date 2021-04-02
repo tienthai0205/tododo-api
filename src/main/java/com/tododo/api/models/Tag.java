@@ -33,6 +33,11 @@ public class Tag extends BaseModel {
     public Tag() {
     }
 
+    public Tag(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
+
     public Tag(int id, String title, String description, Set<Todo> todoItems, Set<Note> notes) {
         this.id = id;
         this.title = title;

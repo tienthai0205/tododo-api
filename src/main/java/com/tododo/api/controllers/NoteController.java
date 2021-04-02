@@ -61,7 +61,7 @@ public class NoteController {
     public ResponseEntity<?> deleteNote(Principal principal, @PathVariable int id) {
         Note note = noteRepository.findById(id);
         if (note == null) {
-            return new ResponseEntity<>("Todo item with id " + id + " not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Note with id " + id + " not found", HttpStatus.NOT_FOUND);
         }
 
         if (note.getUser().getId() != currentUser(principal).getId()) {

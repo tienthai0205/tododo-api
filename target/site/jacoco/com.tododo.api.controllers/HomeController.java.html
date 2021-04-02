@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.*;
 
     @GetMapping(&quot;/admin/users&quot;)
     public ResponseEntity&lt;?&gt; getUserList() {
-<span class="nc" id="L39">        return ResponseEntity.ok(userRepository.findAll());</span>
+<span class="fc" id="L39">        return ResponseEntity.ok(userRepository.findAll());</span>
     }
 
     @RequestMapping(value = &quot;/authenticate&quot;, method = RequestMethod.POST)
@@ -55,8 +55,8 @@ import org.springframework.web.bind.annotation.*;
     @RequestMapping(value = &quot;/register&quot;, method = RequestMethod.POST)
     public ResponseEntity&lt;?&gt; saveUser(@RequestBody AuthenticationRequest user) {
 <span class="fc" id="L57">        UserEntity newUser = userDetailsService.save(user);</span>
-<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        if (newUser == null) {</span>
-<span class="nc" id="L59">            return new ResponseEntity&lt;&gt;(&quot;User with that username already exists!&quot;, HttpStatus.BAD_REQUEST);</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (newUser == null) {</span>
+<span class="fc" id="L59">            return new ResponseEntity&lt;&gt;(&quot;User with that username already exists!&quot;, HttpStatus.BAD_REQUEST);</span>
         }
 
 <span class="fc" id="L62">        return ResponseEntity.ok(newUser);</span>
@@ -65,10 +65,10 @@ import org.springframework.web.bind.annotation.*;
     private void authenticate(String username, String password) throws Exception {
         try {
 <span class="fc" id="L67">            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));</span>
-<span class="nc" id="L68">        } catch (DisabledException e) {</span>
-<span class="nc" id="L69">            throw new Exception(&quot;USER_DISABLED&quot;, e);</span>
-<span class="nc" id="L70">        } catch (BadCredentialsException e) {</span>
-<span class="nc" id="L71">            throw new Exception(&quot;INVALID_CREDENTIALS&quot;, e);</span>
+<span class="fc" id="L68">        } catch (DisabledException e) {</span>
+<span class="fc" id="L69">            throw new Exception(&quot;USER_DISABLED&quot;, e);</span>
+<span class="fc" id="L70">        } catch (BadCredentialsException e) {</span>
+<span class="fc" id="L71">            throw new Exception(&quot;INVALID_CREDENTIALS&quot;, e);</span>
 <span class="fc" id="L72">        }</span>
 <span class="fc" id="L73">    }</span>
 }

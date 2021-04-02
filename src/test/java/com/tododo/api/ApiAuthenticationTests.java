@@ -57,13 +57,23 @@ public class ApiAuthenticationTests {
 
     @Test
     void testRegisterNewUser() throws Exception {
+        AuthenticationRequest badRequest = new AuthenticationRequest("tien@email.com", "Test12345", "Test User1");
+        String jsonBadRequest = mapper.writeValueAsString(badRequest);
+        MvcResult badResult = mockMvc
+                .perform(post("/api/register").content(jsonBadRequest).contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        assertEquals(400, badResult.getResponse().getStatus());
+        assertEquals("User with that username already exists!", badResult.getResponse().getContentAsString());
+
         AuthenticationRequest request = new AuthenticationRequest("test@email.com", "Test12345", "Test User1");
         String jsonRequest = mapper.writeValueAsString(request);
         MvcResult result = mockMvc
                 .perform(post("/api/register").content(jsonRequest).contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
+
         UserEntity newUser = userRepository.findByUsername("test@email.com");
         assertEquals(200, result.getResponse().getStatus());
+
         assertEquals("Test User1", newUser.getName());
         System.out.println(userRepository.findAll());
         // userRepository.delete(newUser);
@@ -110,5 +120,39 @@ public class ApiAuthenticationTests {
                 .perform(post("/api/authenticate").content(jsonRequest).contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
         assertEquals(200, result.getResponse().getStatus());
+    }
+
+    @Test
+    void testWrongCredentials() throws Exception {
+
+        AuthenticationRequest request = new AuthenticationRequest();
+
+        // userRepository.deleteAll();
+        request.setUsername("tien@email.com");
+        request.setPassword("Tien1234");
+        String jsonRequest = mapper.writeValueAsString(request);
+        MvcResult result = mockMvc
+                .perform(post("/api/authenticate").content(jsonRequest).contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        assertEquals(401, result.getResponse().getStatus());
+    }
+
+    @Test
+    void testDisabledUser() throws Exception {
+
+        UserEntity user = userRepository.findByUsername("user@email.com");
+        user.setActive(false);
+        userRepository.save(user);
+
+        AuthenticationRequest request = new AuthenticationRequest();
+
+        // userRepository.deleteAll();
+        request.setUsername("user@email.com");
+        request.setPassword("User12345");
+        String jsonRequest = mapper.writeValueAsString(request);
+        MvcResult result = mockMvc
+                .perform(post("/api/authenticate").content(jsonRequest).contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        assertEquals(401, result.getResponse().getStatus());
     }
 }
