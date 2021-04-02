@@ -78,13 +78,84 @@ public class ApiGroupTests {
     void addGroup() throws Exception {
         String url = "/api/groups";
         Group newGroup = new Group("Fangroup", "This is a fan group");
-        System.out.println("+++++++++" + groupRepository.findAll());
         String jsonRequest = mapper.writeValueAsString(newGroup);
 
         MvcResult result = mockMvc.perform(post(url).content(jsonRequest).contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + accessToken)).andReturn();
-        System.out.println("+++++++++" + groupRepository.findAll());
         assertEquals(201, result.getResponse().getStatus());
+    }
+
+    @Test
+    void addMemberToGroup() throws Exception {
+        String url = "/api/groups/{id}/members/{id}";
+        Group newGroup = new Group("Test group2", "This is a test group");
+        int id = groupRepository.save(newGroup).getId();
+
+        int currentUserId = userRepository.findByUsername("tien@email.com").getId();
+
+        MvcResult notfoundResult = mockMvc
+                .perform(put(url, 100, currentUserId).header("Authorization", "Bearer " + accessToken)).andReturn();
+        assertEquals(404, notfoundResult.getResponse().getStatus());
+        assertEquals("Group with id 100 not found", notfoundResult.getResponse().getContentAsString());
+
+        MvcResult notfoundUserResult = mockMvc
+                .perform(put(url, id, 100).header("Authorization", "Bearer " + accessToken)).andReturn();
+        assertEquals(404, notfoundUserResult.getResponse().getStatus());
+        assertEquals("User with id 100 not found", notfoundUserResult.getResponse().getContentAsString());
+
+        MvcResult result = mockMvc.perform(put(url, id, currentUserId).header("Authorization", "Bearer " + accessToken))
+                .andReturn();
+        assertEquals(200, result.getResponse().getStatus());
+    }
+
+    @Test
+    void deleteGroup() throws Exception {
+        String url = "/api/groups/{id}";
+
+        MvcResult notfoundResult = mockMvc.perform(delete(url, 100).header("Authorization", "Bearer " + accessToken))
+                .andReturn();
+        assertEquals(404, notfoundResult.getResponse().getStatus());
+        assertEquals("Group with id 100 not found", notfoundResult.getResponse().getContentAsString());
+
+        Group newGroup = new Group("Test group3", "This is a test group 3");
+        int id = groupRepository.save(newGroup).getId();
+
+        MvcResult result = mockMvc.perform(delete(url, id).header("Authorization", "Bearer " + accessToken))
+                .andReturn();
+
+        assertEquals(200, result.getResponse().getStatus());
+        assertEquals("Your request has been successfully handled!", result.getResponse().getContentAsString());
+
+    }
+
+    @Test
+    void removeMemberFromGroup() throws Exception {
+        String url = "/api/groups/{id}/members/{userId}";
+        UserEntity currentUser = userRepository.findByUsername("tien@email.com");
+
+        Group newGroup = new Group("Test group4", "This is a test group 4");
+        int id = groupRepository.save(newGroup).getId();
+        newGroup.addMember(currentUser);
+        groupRepository.save(newGroup);
+
+        MvcResult notfoundResult = mockMvc
+                .perform(delete(url, 100, currentUser.getId()).header("Authorization", "Bearer " + accessToken))
+                .andReturn();
+        assertEquals(404, notfoundResult.getResponse().getStatus());
+        assertEquals("Group with id 100 not found", notfoundResult.getResponse().getContentAsString());
+
+        MvcResult notfoundUserResult = mockMvc
+                .perform(delete(url, id, 100).header("Authorization", "Bearer " + accessToken)).andReturn();
+        assertEquals(404, notfoundUserResult.getResponse().getStatus());
+        assertEquals("User with id 100 not found", notfoundUserResult.getResponse().getContentAsString());
+
+        MvcResult result = mockMvc
+                .perform(delete(url, id, currentUser.getId()).header("Authorization", "Bearer " + accessToken))
+                .andReturn();
+
+        assertEquals(200, result.getResponse().getStatus());
+        assertEquals("Your request has been successfully handled!", result.getResponse().getContentAsString());
+
     }
 
     private void getAccessToken() throws Exception {

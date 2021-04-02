@@ -60,7 +60,7 @@ public class GroupController {
         }
         UserEntity newMember = userRepository.findById(userId);
         if (newMember == null) {
-            return new ResponseEntity<>("User with id " + id + " not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("User with id " + userId + " not found", HttpStatus.NOT_FOUND);
         }
         group.addMember(newMember);
         return ResponseEntity.ok(groupRepository.save(group));
@@ -75,7 +75,7 @@ public class GroupController {
         }
         UserEntity member = userRepository.findById(userId);
         if (member == null) {
-            return new ResponseEntity<>("User with id " + id + " not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("User with id " + userId + " not found", HttpStatus.NOT_FOUND);
         }
         group.removeMember(member);
         return ResponseEntity.ok("Your request has been successfully handled!");

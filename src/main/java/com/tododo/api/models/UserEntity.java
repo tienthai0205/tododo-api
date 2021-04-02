@@ -48,14 +48,6 @@ public class UserEntity extends BaseModel {
     public UserEntity() {
     }
 
-    public UserEntity(String username, String name, String password, String role, boolean active) {
-        this.username = username;
-        this.name = name;
-        this.password = password;
-        this.role = role;
-        this.active = active;
-    }
-
     public int getId() {
         return this.id;
     }
