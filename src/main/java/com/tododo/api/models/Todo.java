@@ -46,6 +46,11 @@ public class Todo extends BaseModel {
     public Todo() {
     }
 
+    public Todo(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
+
     public int getId() {
         return this.id;
     }

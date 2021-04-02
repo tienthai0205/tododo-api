@@ -2,6 +2,10 @@ package com.tododo.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tododo.api.models.AuthenticationRequest;
+import com.tododo.api.models.Todo;
+import com.tododo.api.models.UserEntity;
+import com.tododo.api.repositories.TodoRepository;
+import com.tododo.api.repositories.UserRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,6 +39,12 @@ public class ApiTodoTests {
     @Autowired
     private WebApplicationContext context;
 
+    @Autowired
+    private TodoRepository todoRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
     @BeforeEach
     public void setup() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(SecurityMockMvcConfigurers.springSecurity())
@@ -52,13 +62,29 @@ public class ApiTodoTests {
         assertEquals(200, result.getResponse().getStatus());
     }
 
-    // @Test
-    // void getTodoItem() throws Exception {
-    // String url = "/api/todos/{id}";
-    // MvcResult result = mockMvc.perform(get(url, "1").header("Authorization",
-    // "Bearer " + accessToken)).andReturn();
-    // assertEquals(200, result.getResponse().getStatus());
-    // }
+    @Test
+    void getTodoItem() throws Exception {
+        UserEntity currentUser = userRepository.findByUsername("tien@email.com");
+        Todo newTodo = new Todo("Todo1", "Test todo1");
+        newTodo.setUser(currentUser);
+        int id = todoRepository.save(newTodo).getId();
+
+        String url = "/api/todos/{" + id + "}";
+        MvcResult result = mockMvc.perform(get(url, "1").header("Authorization", "Bearer " + accessToken)).andReturn();
+        assertEquals(200, result.getResponse().getStatus());
+    }
+
+    @Test
+    void addTodoItem() throws Exception {
+        UserEntity currentUser = userRepository.findByUsername("tien@email.com");
+        Todo newTodo = new Todo("Todo1", "Test todo1");
+        newTodo.setUser(currentUser);
+        String jsonRequest = mapper.writeValueAsString(newTodo);
+        String url = "/api/todos";
+        MvcResult result = mockMvc.perform(post(url).content(jsonRequest).contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + accessToken)).andReturn();
+        assertEquals(201, result.getResponse().getStatus());
+    }
 
     private void getAccessToken() throws Exception {
         AuthenticationRequest request = new AuthenticationRequest();
