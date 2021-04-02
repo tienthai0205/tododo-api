@@ -36,6 +36,11 @@ public class Note extends BaseModel {
     public Note() {
     }
 
+    public Note(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
     public int getId() {
         return this.id;
     }

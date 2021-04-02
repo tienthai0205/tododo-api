@@ -1,0 +1,4 @@
+com/tododo/api/ApiApplicationTests.class
+com/tododo/api/ApiNoteTests.class
+com/tododo/api/ApiTodoTests.class
+com/tododo/api/ApiAuthenticationTests.class

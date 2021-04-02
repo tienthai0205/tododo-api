@@ -1,10 +1,12 @@
 package com.tododo.api;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tododo.api.models.AuthenticationRequest;
-import com.tododo.api.models.Todo;
+import com.tododo.api.models.Note;
 import com.tododo.api.models.UserEntity;
-import com.tododo.api.repositories.TodoRepository;
+import com.tododo.api.repositories.NoteRepository;
 import com.tododo.api.repositories.UserRepository;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,16 +22,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.Map;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class ApiTodoTests {
-
+public class ApiNoteTests {
     private MockMvc mockMvc;
 
     private String accessToken;
@@ -41,7 +40,7 @@ public class ApiTodoTests {
     private WebApplicationContext context;
 
     @Autowired
-    private TodoRepository todoRepository;
+    private NoteRepository noteRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -51,12 +50,11 @@ public class ApiTodoTests {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(SecurityMockMvcConfigurers.springSecurity())
                 .build();
         getAccessToken();
-
     }
 
     @Test
-    void getTodosForUser() throws Exception {
-        String url = "/api/todos";
+    void getNotesForUser() throws Exception {
+        String url = "/api/notes";
         MvcResult forbiddenResult = mockMvc.perform(get(url)).andReturn();
         assertEquals(401, forbiddenResult.getResponse().getStatus());
         MvcResult result = mockMvc.perform(get(url).header("Authorization", "Bearer " + accessToken)).andReturn();
@@ -65,37 +63,37 @@ public class ApiTodoTests {
     }
 
     @Test
-    void getTodoItem() throws Exception {
+    void getNote() throws Exception {
         UserEntity currentUser = userRepository.findByUsername("tien@email.com");
-        Todo newTodo = new Todo("Todo1", "Test todo1");
-        newTodo.setUser(currentUser);
-        int id = todoRepository.save(newTodo).getId();
+        Note newNote = new Note("Note1", "Test note1");
+        newNote.setUser(currentUser);
+        int id = noteRepository.save(newNote).getId();
 
-        String url = "/api/todos/{id}";
+        String url = "/api/notes/{id}";
         MvcResult result = mockMvc.perform(get(url, id).header("Authorization", "Bearer " + accessToken)).andReturn();
         assertEquals(200, result.getResponse().getStatus());
     }
 
     @Test
-    void addTodoItem() throws Exception {
+    void addNote() throws Exception {
         UserEntity currentUser = userRepository.findByUsername("tien@email.com");
-        Todo newTodo = new Todo("Todo1", "Test todo1");
-        newTodo.setUser(currentUser);
-        String jsonRequest = mapper.writeValueAsString(newTodo);
-        String url = "/api/todos";
+        Note newNote = new Note("Note1", "Test note1");
+        newNote.setUser(currentUser);
+        String jsonRequest = mapper.writeValueAsString(newNote);
+        String url = "/api/notes";
         MvcResult result = mockMvc.perform(post(url).content(jsonRequest).contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + accessToken)).andReturn();
         assertEquals(201, result.getResponse().getStatus());
     }
 
     @Test
-    void deleteTodoItem() throws Exception {
+    void deleteNote() throws Exception {
         UserEntity currentUser = userRepository.findByUsername("tien@email.com");
-        Todo newTodo = new Todo("Todo1", "Test todo1");
-        newTodo.setUser(currentUser);
-        int id = todoRepository.save(newTodo).getId();
+        Note newNote = new Note("Note1", "Test note1");
+        newNote.setUser(currentUser);
+        int id = noteRepository.save(newNote).getId();
 
-        String url = "/api/todos/{id}";
+        String url = "/api/notes/{id}";
         MvcResult result = mockMvc.perform(delete(url, id).header("Authorization", "Bearer " + accessToken))
                 .andReturn();
         assertEquals("Your request has been successfully handled!", result.getResponse().getContentAsString());
@@ -118,5 +116,4 @@ public class ApiTodoTests {
 
         // accessToken = rsp.getJwt();
     }
-
 }

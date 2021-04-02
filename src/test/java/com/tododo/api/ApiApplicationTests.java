@@ -48,5 +48,4 @@ class ApiApplicationTests {
 				.andReturn();
 		assertEquals(200, failureResult.getResponse().getStatus());
 	}
-
 }

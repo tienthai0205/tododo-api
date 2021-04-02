@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GroupController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">api</a> &gt; <a href="index.source.html" class="el_package">com.tododo.api.controllers</a> &gt; <span class="el_source">GroupController.java</span></div><h1>GroupController.java</h1><pre class="source lang-java linenums">package com.tododo.api.controllers;
+
+import java.security.Principal;
+
+import com.tododo.api.models.*;
+import com.tododo.api.repositories.*;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@CrossOrigin
+@RequestMapping(&quot;/api/groups&quot;)
+public class GroupController {
+    private final GroupRepository groupRepository;
+    private final UserRepository userRepository;
+
+<span class="fc" id="L19">    public GroupController(GroupRepository groupRepository, UserRepository userRepository) {</span>
+<span class="fc" id="L20">        this.groupRepository = groupRepository;</span>
+<span class="fc" id="L21">        this.userRepository = userRepository;</span>
+<span class="fc" id="L22">    }</span>
+
+    @GetMapping(&quot;/all&quot;)
+    public ResponseEntity&lt;?&gt; getAllGroups(Principal principal) {
+
+<span class="nc" id="L27">        Iterable&lt;Group&gt; groups = groupRepository.findAll();</span>
+
+<span class="nc" id="L29">        return ResponseEntity.ok(groups);</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;?&gt; getGroup(Principal principal, @PathVariable int id) {
+<span class="nc" id="L34">        Group group = groupRepository.findById(id);</span>
+
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        if (group == null) {</span>
+<span class="nc" id="L37">            return new ResponseEntity&lt;&gt;(&quot;Group with id &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND);</span>
+        }
+
+<span class="nc" id="L40">        return ResponseEntity.ok(group);</span>
+    }
+
+    @RequestMapping(value = &quot;&quot;, consumes = { &quot;application/json&quot; }, method = RequestMethod.POST)
+    public ResponseEntity&lt;?&gt; addGroup(@RequestBody Group newGroup, Principal principal) {
+<span class="nc" id="L45">        Group memberGroup = new Group(newGroup.getName(), newGroup.getDescription());</span>
+<span class="nc" id="L46">        memberGroup.setType(GroupTypeEnum.GROUP_MEMBER);</span>
+<span class="nc" id="L47">        newGroup.setType(GroupTypeEnum.GROUP_ADMIN);</span>
+<span class="nc" id="L48">        groupRepository.save(newGroup);</span>
+<span class="nc" id="L49">        groupRepository.save(memberGroup);</span>
+
+<span class="nc" id="L51">        newGroup.addMember(currentUser(principal));</span>
+<span class="nc" id="L52">        return new ResponseEntity&lt;&gt;(groupRepository.save(newGroup), HttpStatus.CREATED);</span>
+    }
+
+    @PutMapping(&quot;/{id}/members/{userId}&quot;)
+    public ResponseEntity&lt;?&gt; addMemberToGroup(Principal principal, @PathVariable int id, @PathVariable int userId) {
+<span class="nc" id="L57">        Group group = groupRepository.findById(id);</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        if (group == null) {</span>
+<span class="nc" id="L59">            return new ResponseEntity&lt;&gt;(&quot;Group with id &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND);</span>
+        }
+<span class="nc" id="L61">        UserEntity newMember = userRepository.findById(userId);</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (newMember == null) {</span>
+<span class="nc" id="L63">            return new ResponseEntity&lt;&gt;(&quot;User with id &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND);</span>
+        }
+<span class="nc" id="L65">        group.addMember(newMember);</span>
+<span class="nc" id="L66">        return ResponseEntity.ok(groupRepository.save(group));</span>
+    }
+
+    @DeleteMapping(&quot;/{id}/members/{userId}&quot;)
+    public ResponseEntity&lt;?&gt; removeMemberFromGroup(Principal principal, @PathVariable int id,
+            @PathVariable int userId) {
+<span class="nc" id="L72">        Group group = groupRepository.findById(id);</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        if (group == null) {</span>
+<span class="nc" id="L74">            return new ResponseEntity&lt;&gt;(&quot;Group with id &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND);</span>
+        }
+<span class="nc" id="L76">        UserEntity member = userRepository.findById(userId);</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (member == null) {</span>
+<span class="nc" id="L78">            return new ResponseEntity&lt;&gt;(&quot;User with id &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND);</span>
+        }
+<span class="nc" id="L80">        group.removeMember(member);</span>
+<span class="nc" id="L81">        return ResponseEntity.ok(&quot;Your request has been successfully handled!&quot;);</span>
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;?&gt; deleteGroup(Principal principal, @PathVariable int id) {
+<span class="nc" id="L86">        Group group = groupRepository.findById(id);</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        if (group == null) {</span>
+<span class="nc" id="L88">            return new ResponseEntity&lt;&gt;(&quot;Group with id &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND);</span>
+        }
+<span class="nc" id="L90">        groupRepository.delete(group);</span>
+<span class="nc" id="L91">        return ResponseEntity.ok(&quot;Your request has been successfully handled!&quot;);</span>
+    }
+
+    private UserEntity currentUser(Principal principal) {
+<span class="nc" id="L95">        UserEntity currentUser = userRepository.findByUsername(principal.getName());</span>
+<span class="nc" id="L96">        return currentUser;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

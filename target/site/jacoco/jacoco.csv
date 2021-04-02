@@ -1,0 +1,8 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+api,com.tododo.api,ApiApplication,5,3,0,0,2,1,1,1,1,1
+api,com.tododo.api.controllers,NoteController,108,87,6,4,18,21,8,6,3,6
+api,com.tododo.api.controllers,HomeController,25,50,1,1,6,12,2,5,1,5
+api,com.tododo.api.controllers,GroupController,212,9,12,0,36,4,13,1,7,1
+api,com.tododo.api.controllers,TodoController,163,87,10,4,28,21,11,6,4,6
+api,com.tododo.api.controllers,TagController,162,9,12,0,31,4,12,1,6,1
+api,com.tododo.api.filters,JwtRequestFilter,0,66,3,7,0,17,3,4,0,2
