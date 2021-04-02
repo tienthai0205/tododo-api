@@ -12,6 +12,14 @@ To run all the test:
 ./mvnw test
 ```
 
+The project uses Jacoco for checking code coverage. To view the report:
+
+```
+./mvnw clean verify
+./mvnw jacoco:report
+```
+Jacoco report is located at `target/site/jacoco/index.html`
+
 Swagger documentation could be found at:
 
 `http://localhost:5055/v2/api-docs` - swagger2 raw json version

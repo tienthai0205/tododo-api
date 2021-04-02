@@ -54,6 +54,7 @@ public class ApiNoteTests {
 
     @Test
     void getNotesForUser() throws Exception {
+        noteRepository.deleteAll();
         String url = "/api/notes";
         MvcResult forbiddenResult = mockMvc.perform(get(url)).andReturn();
         assertEquals(401, forbiddenResult.getResponse().getStatus());
