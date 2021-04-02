@@ -6,12 +6,12 @@ import java.util.Set;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "`group`")
+@Table(name = "`group`", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "type" }) })
 public class Group extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(unique = true)
+    @Column
     private String name;
     @Column
     private String description;
