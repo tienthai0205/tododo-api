@@ -60,10 +60,25 @@ public class GroupController {
         }
         UserEntity newMember = userRepository.findById(userId);
         if (newMember == null) {
-            return new ResponseEntity<>("User with id " + id + " not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("User with id " + userId + " not found", HttpStatus.NOT_FOUND);
         }
         group.addMember(newMember);
         return ResponseEntity.ok(groupRepository.save(group));
+    }
+
+    @DeleteMapping("/{id}/members/{userId}")
+    public ResponseEntity<?> removeMemberFromGroup(Principal principal, @PathVariable int id,
+            @PathVariable int userId) {
+        Group group = groupRepository.findById(id);
+        if (group == null) {
+            return new ResponseEntity<>("Group with id " + id + " not found", HttpStatus.NOT_FOUND);
+        }
+        UserEntity member = userRepository.findById(userId);
+        if (member == null) {
+            return new ResponseEntity<>("User with id " + userId + " not found", HttpStatus.NOT_FOUND);
+        }
+        group.removeMember(member);
+        return ResponseEntity.ok("Your request has been successfully handled!");
     }
 
     @DeleteMapping("/{id}")

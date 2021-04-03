@@ -46,6 +46,18 @@ public class Todo extends BaseModel {
     public Todo() {
     }
 
+    public Todo(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
+
+    public Todo(String title, String description, long duration, float percentage) {
+        this.title = title;
+        this.description = description;
+        this.duration = duration;
+        this.percentage = percentage;
+    }
+
     public int getId() {
         return this.id;
     }
@@ -104,6 +116,10 @@ public class Todo extends BaseModel {
 
     public void addTag(Tag tag) {
         this.tags.add(tag);
+    }
+
+    public void removeTag(Tag tag) {
+        tags.remove(tag);
     }
 
 }

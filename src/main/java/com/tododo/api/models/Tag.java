@@ -33,12 +33,9 @@ public class Tag extends BaseModel {
     public Tag() {
     }
 
-    public Tag(int id, String title, String description, Set<Todo> todoItems, Set<Note> notes) {
-        this.id = id;
+    public Tag(String title, String description) {
         this.title = title;
         this.description = description;
-        this.todoItems = todoItems;
-        this.notes = notes;
     }
 
     public int getId() {
@@ -67,14 +64,6 @@ public class Tag extends BaseModel {
 
     public Set<Note> getNotes() {
         return this.notes;
-    }
-
-    public void addNote(Note note) {
-        this.notes.add(note);
-    }
-
-    public void addTodo(Todo todo) {
-        this.todoItems.add(todo);
     }
 
     public UserEntity getUser() {

@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -45,9 +44,14 @@ class ApiApplicationTests {
 	@WithMockUser(roles = "ADMIN")
 	@Test
 	void testHelloWithAdmin() throws Exception {
-		MvcResult failureResult = mockMvc.perform(get("/api/admin/hello").contentType(MediaType.APPLICATION_JSON))
-				.andReturn();
-		assertEquals(200, failureResult.getResponse().getStatus());
+		MvcResult result = mockMvc.perform(get("/api/admin/hello").contentType(MediaType.APPLICATION_JSON)).andReturn();
+		assertEquals(200, result.getResponse().getStatus());
 	}
 
+	@WithMockUser(roles = "ADMIN")
+	@Test
+	void getAllUsers() throws Exception {
+		MvcResult result = mockMvc.perform(get("/api/admin/users").contentType(MediaType.APPLICATION_JSON)).andReturn();
+		assertEquals(200, result.getResponse().getStatus());
+	}
 }

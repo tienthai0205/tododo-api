@@ -1,5 +1,6 @@
 package com.tododo.api.models;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -27,12 +28,17 @@ public class Note extends BaseModel {
 
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "noteTag", joinColumns = @JoinColumn(name = "note_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags;
+    private Set<Tag> tags = new HashSet<>();
 
     // @ManyToMany
     // private Set<User> sharedWith;
 
     public Note() {
+    }
+
+    public Note(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 
     public int getId() {
@@ -73,5 +79,9 @@ public class Note extends BaseModel {
 
     public void addTag(Tag tag) {
         tags.add(tag);
+    }
+
+    public void removeTag(Tag tag) {
+        tags.remove(tag);
     }
 }

@@ -80,7 +80,7 @@ public class TodoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> updateTodoItem(Principal principal, @PathVariable int id) {
+    public ResponseEntity<?> deleteTodoItem(Principal principal, @PathVariable int id) {
         Todo todo = todoRepository.findById(id);
         if (todo == null) {
             return new ResponseEntity<>("Todo item with id " + id + " not found", HttpStatus.NOT_FOUND);
@@ -107,13 +107,22 @@ public class TodoController {
     }
 
     @PutMapping("/{id}/tag/{tagId}")
-    public ResponseEntity<?> addTagToNote(Principal principal, @PathVariable int id, @PathVariable int tagId) {
+    public ResponseEntity<?> addTagToTodo(Principal principal, @PathVariable int id, @PathVariable int tagId) {
         Todo todo = todoRepository.findById(id);
         Tag tag = tagRepository.findById(tagId);
         todo.addTag(tag);
 
         return ResponseEntity.ok(todoRepository.save(todo));
 
+    }
+
+    @DeleteMapping("/{id}/tag/{tagId}")
+    public ResponseEntity<?> removeTagFromTodo(Principal principal, @PathVariable int id, @PathVariable int tagId) {
+        Todo todo = todoRepository.findById(id);
+        Tag tag = tagRepository.findById(tagId);
+        todo.removeTag(tag);
+
+        return ResponseEntity.ok("Your request has been successfully handled!");
     }
 
     private UserEntity currentUser(Principal principal) {

@@ -61,7 +61,7 @@ public class NoteController {
     public ResponseEntity<?> deleteNote(Principal principal, @PathVariable int id) {
         Note note = noteRepository.findById(id);
         if (note == null) {
-            return new ResponseEntity<>("Todo item with id " + id + " not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Note with id " + id + " not found", HttpStatus.NOT_FOUND);
         }
 
         if (note.getUser().getId() != currentUser(principal).getId()) {
@@ -80,6 +80,15 @@ public class NoteController {
 
         return ResponseEntity.ok(noteRepository.save(note));
 
+    }
+
+    @DeleteMapping("/{noteId}/tag/{tagId}")
+    public ResponseEntity<?> removeTagFromNote(Principal principal, @PathVariable int noteId, @PathVariable int tagId) {
+        Note note = noteRepository.findById(noteId);
+        Tag tag = tagRepository.findById(tagId);
+        note.removeTag(tag);
+
+        return ResponseEntity.ok("Your request has been successfully handled!");
     }
 
     @GetMapping("/{id}/tags")
