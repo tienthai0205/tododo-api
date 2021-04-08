@@ -1,5 +1,7 @@
 package com.tododo.api.controllers;
 
+import java.security.Principal;
+
 import com.tododo.api.models.*;
 import com.tododo.api.repositories.UserRepository;
 import com.tododo.api.services.JwtUtil;
@@ -60,6 +62,13 @@ public class HomeController {
         }
 
         return ResponseEntity.ok(newUser);
+    }
+
+    @GetMapping("/account")
+    public ResponseEntity<?> getAccountInfo(Principal principal) {
+        UserEntity currentUser = userRepository.findByUsername(principal.getName());
+
+        return ResponseEntity.ok(currentUser);
     }
 
     private void authenticate(String username, String password) throws Exception {
