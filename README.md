@@ -31,6 +31,8 @@ Then simply run the following command to start the server:
 ./mvnw spring-boot:run
 ```
 
+The server runs in port 5055
+
 To run all the test:
 
 ```
