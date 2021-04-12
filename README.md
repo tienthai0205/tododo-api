@@ -1,6 +1,31 @@
 # Tododo API
 
-To start up the server:
+## Running the project using ./mvnw 
+
+Before starting up the server (without using docker), there are a few setup needs to be done: 
+
+- Start up your mysql server on your local machine and use your credentials to login to the server.
+
+- Create a new database with name `spring_security` using the command:
+
+        CREATE DATABASE spring_security;
+
+Then, head over to `application.properties` file (locates in the main/resources folder)
+
+Uncomment the following lines:
+
+    spring.datasource.url=jdbc:mysql://localhost:3306/spring_security
+    spring.datasource.username=<your_mysql_username>
+    If you set a password for your mysql server, add the password in this line:
+    spring.datasource.password=<your_password>
+
+and then comment out the following lines:
+    spring.datasource.url=jdbc:mysql://tododo-db:3306/spring_security?autoReconnect=true&failOverReadOnly=false&maxReconnects=10
+    spring.datasource.username=admin (leave this line if your username for the your local mysql server is also `admin`)
+
+*Explanation: Basically what we done above is changing the connections of the spring boot application and the database server. The initial setup was used for running the project in docker, so both the API server and MySQL database are containerized. That's why we needed the line `spring.datasource.url=jdbc:mysql://tododo-db:3306/spring_security?autoReconnect=true&failOverReadOnly=false&maxReconnects=10` as this one point to the `tododo-db` database container. The credential setup to access this database are 'admin' and 'root' for username and password respectively. When using the ./mvnw command to run the project without docker, the api server needs to be connected to the available mysql database. of course you can still leave the configuration with the connection to the database inside the container, as well as the credentials attatched to that database, but the precondition is the database container has to be running for you to be able to access it. 
+    
+Then simply run the following command to start the server:
 
 ```bash
 ./mvnw spring-boot:run
@@ -59,4 +84,3 @@ After that, you would be prompted to enter password. The password is `root`. Ent
 
     mysql> use spring_security;
     mysql> select * from user;
-
