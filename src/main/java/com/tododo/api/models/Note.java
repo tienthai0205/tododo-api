@@ -22,7 +22,7 @@ public class Note extends BaseModel {
 
     @Column
     private String title;
-    @Column
+    @Column(length = 1024)
     private String content;
     // private Group group;
 
