@@ -75,7 +75,7 @@ public class TodoController {
         todo.setDescription(updateTodo.getDescription());
         todo.setDuration(updateTodo.getDuration());
         todo.setPercentage(updateTodo.getPercentage());
-        return ResponseEntity.ok(todo);
+        return ResponseEntity.ok(todoRepository.save(todo));
 
     }
 

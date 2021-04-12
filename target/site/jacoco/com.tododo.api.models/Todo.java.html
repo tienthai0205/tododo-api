@@ -24,8 +24,8 @@ public class Todo extends BaseModel {
     private String title;
     @Column
     private String description;
-<span class="fc" id="L27">    @Column</span>
-    private float percentage = 0.0f;
+    @Column
+<span class="fc" id="L28">    private float percentage = 0.0f;</span>
     @Column
     private long duration;
     @Column
@@ -39,9 +39,9 @@ public class Todo extends BaseModel {
     // @Column(name = &quot;user&quot;)
     // private Set&lt;UserEntity&gt; shareWith;
 
-<span class="fc" id="L42">    @ManyToMany(cascade = CascadeType.PERSIST)</span>
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = &quot;todoTag&quot;, joinColumns = @JoinColumn(name = &quot;todo_id&quot;), inverseJoinColumns = @JoinColumn(name = &quot;tag_id&quot;))
-    private Set&lt;Tag&gt; tags = new HashSet&lt;&gt;();
+<span class="fc" id="L44">    private Set&lt;Tag&gt; tags = new HashSet&lt;&gt;();</span>
 
 <span class="fc" id="L46">    public Todo() {</span>
 <span class="fc" id="L47">    }</span>

@@ -27,17 +27,14 @@ public class UserEntity extends BaseModel {
     private String name;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     @JsonManagedReference()
     private Set<Todo> todoItems;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     @JsonManagedReference()
     private Set<Note> notes;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     @JsonManagedReference()
     private Set<Tag> tags;
 

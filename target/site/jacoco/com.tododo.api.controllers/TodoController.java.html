@@ -75,7 +75,7 @@ public class TodoController {
 <span class="fc" id="L75">        todo.setDescription(updateTodo.getDescription());</span>
 <span class="fc" id="L76">        todo.setDuration(updateTodo.getDuration());</span>
 <span class="fc" id="L77">        todo.setPercentage(updateTodo.getPercentage());</span>
-<span class="fc" id="L78">        return ResponseEntity.ok(todo);</span>
+<span class="fc" id="L78">        return ResponseEntity.ok(todoRepository.save(todo));</span>
 
     }
 
