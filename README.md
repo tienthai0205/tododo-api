@@ -62,6 +62,8 @@ The seed data can be found in the file data.sql.
     - username: max@email.com, password: Max12345 (admin)
     - username: user@email.com, password: User12345 (user)
 
+There are also seed database for Todo and Note models, as these seed are necessary for the Hybrid application to have some initial data to show
+
 Notice that there is no mechanisim to remove the table if already exist, therefore in order to prevent duplicate data in the database, after running the project for the first time and got the seed data in the database, please comment out the following line in the `application.properties`
 
     spring.datasource.initialization-mode=always
