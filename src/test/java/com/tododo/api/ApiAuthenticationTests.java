@@ -50,11 +50,6 @@ public class ApiAuthenticationTests {
                 .build();
     }
 
-    // @BeforeEach
-    // public void setup() {
-    // mockMvc = MockMvcBuilders.standaloneSetup(homeController).build();
-    // }
-
     @Test
     void testRegisterNewUser() throws Exception {
         AuthenticationRequest badRequest = new AuthenticationRequest("tien@email.com", "Test12345", "Test User1");
@@ -76,36 +71,7 @@ public class ApiAuthenticationTests {
 
         assertEquals("Test User1", newUser.getName());
         System.out.println(userRepository.findAll());
-        // userRepository.delete(newUser);
-        // clean up everytime testuser is added
     }
-
-    // @Test
-    // void testRegister() throws Exception {
-    // AuthenticationRequest request = new AuthenticationRequest("test1@email.com",
-    // "Test12345", "Test User1");
-    // String jsonRequest = mapper.writeValueAsString(request);
-    // System.out.println("---------------------" + homeController +
-    // "---------------------");
-    // mockMvc.perform(post("/api/register").content(jsonRequest).contentType(MediaType.APPLICATION_JSON));
-    // // assertEquals(200, result.getResponse().getStatus());
-    // }
-
-    // @Test
-    // void testRegister() throws Exception {
-    // UserEntity newUser = new UserEntity("test1@email.com", "Test User1",
-    // bcryptEncoder.encode("Test1234"),
-    // "ROLE_USER", true);
-    // when(userRepository.save(newUser)).thenReturn(newUser);
-    // String url = "/api/register";
-    // AuthenticationRequest request = new AuthenticationRequest("test1@email.com",
-    // "Test12345", "Test User1");
-    // String jsonRequest = mapper.writeValueAsString(request);
-    // MvcResult result =
-    // mockMvc.perform(post(url).content(jsonRequest).contentType(MediaType.APPLICATION_JSON))
-    // .andReturn();
-    // assertEquals(200, result.getResponse().getStatus());
-    // }
 
     @Test
     void testAuthenticateUser() throws Exception {

@@ -72,40 +72,59 @@ public class NoteController {
 <span class="fc" id="L72">        return ResponseEntity.ok(&quot;Your request has been successfully handled!&quot;);</span>
     }
 
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;?&gt; updateTodoItem(Principal principal, @PathVariable int id, @RequestBody Note updateNote) {
+<span class="fc" id="L77">        Note note = noteRepository.findById(id);</span>
+
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        if (note == null) {</span>
+<span class="fc" id="L80">            return new ResponseEntity&lt;&gt;(&quot;Note with id &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND);</span>
+        }
+
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        if (note.getUser().getId() != currentUser(principal).getId()) {</span>
+<span class="fc" id="L84">            return new ResponseEntity&lt;&gt;(&quot;You are not authorized to retrieved this item&quot;, HttpStatus.FORBIDDEN);</span>
+        }
+
+        // TODO: Find a more generic or smart way to handle this
+<span class="fc" id="L88">        note.setTitle(updateNote.getTitle());</span>
+<span class="fc" id="L89">        note.setContent(updateNote.getContent());</span>
+
+<span class="fc" id="L91">        return ResponseEntity.ok(noteRepository.save(note));</span>
+    }
+
     @PutMapping(&quot;/{noteId}/tag/{tagId}&quot;)
     public ResponseEntity&lt;?&gt; addTagToNote(Principal principal, @PathVariable int noteId, @PathVariable int tagId) {
-<span class="fc" id="L77">        Note note = noteRepository.findById(noteId);</span>
-<span class="fc" id="L78">        Tag tag = tagRepository.findById(tagId);</span>
-<span class="fc" id="L79">        note.addTag(tag);</span>
+<span class="fc" id="L96">        Note note = noteRepository.findById(noteId);</span>
+<span class="fc" id="L97">        Tag tag = tagRepository.findById(tagId);</span>
+<span class="fc" id="L98">        note.addTag(tag);</span>
 
-<span class="fc" id="L81">        return ResponseEntity.ok(noteRepository.save(note));</span>
+<span class="fc" id="L100">        return ResponseEntity.ok(noteRepository.save(note));</span>
 
     }
 
     @DeleteMapping(&quot;/{noteId}/tag/{tagId}&quot;)
     public ResponseEntity&lt;?&gt; removeTagFromNote(Principal principal, @PathVariable int noteId, @PathVariable int tagId) {
-<span class="fc" id="L87">        Note note = noteRepository.findById(noteId);</span>
-<span class="fc" id="L88">        Tag tag = tagRepository.findById(tagId);</span>
-<span class="fc" id="L89">        note.removeTag(tag);</span>
+<span class="fc" id="L106">        Note note = noteRepository.findById(noteId);</span>
+<span class="fc" id="L107">        Tag tag = tagRepository.findById(tagId);</span>
+<span class="fc" id="L108">        note.removeTag(tag);</span>
 
-<span class="fc" id="L91">        return ResponseEntity.ok(&quot;Your request has been successfully handled!&quot;);</span>
+<span class="fc" id="L110">        return ResponseEntity.ok(&quot;Your request has been successfully handled!&quot;);</span>
     }
 
     @GetMapping(&quot;/{id}/tags&quot;)
     public ResponseEntity&lt;?&gt; getTags(Principal principal, @PathVariable int id) {
-<span class="fc" id="L96">        Note note = noteRepository.findById(id);</span>
-<span class="fc" id="L97">        int userId = currentUser(principal).getId();</span>
-<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (note.getUser().getId() != userId) {</span>
-<span class="fc" id="L99">            return new ResponseEntity&lt;&gt;(&quot;You are not authorized to retrieved this item&quot;, HttpStatus.FORBIDDEN);</span>
+<span class="fc" id="L115">        Note note = noteRepository.findById(id);</span>
+<span class="fc" id="L116">        int userId = currentUser(principal).getId();</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        if (note.getUser().getId() != userId) {</span>
+<span class="fc" id="L118">            return new ResponseEntity&lt;&gt;(&quot;You are not authorized to retrieved this item&quot;, HttpStatus.FORBIDDEN);</span>
         }
-<span class="fc" id="L101">        List&lt;Tag&gt; tags = tagRepository.findByNoteId(id, userId);</span>
+<span class="fc" id="L120">        List&lt;Tag&gt; tags = tagRepository.findByNoteId(id, userId);</span>
 
-<span class="fc" id="L103">        return ResponseEntity.ok(tags);</span>
+<span class="fc" id="L122">        return ResponseEntity.ok(tags);</span>
     }
 
     private UserEntity currentUser(Principal principal) {
-<span class="fc" id="L107">        UserEntity currentUser = userRepository.findByUsername(principal.getName());</span>
-<span class="fc" id="L108">        return currentUser;</span>
+<span class="fc" id="L126">        UserEntity currentUser = userRepository.findByUsername(principal.getName());</span>
+<span class="fc" id="L127">        return currentUser;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

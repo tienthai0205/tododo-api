@@ -13,11 +13,14 @@ To run all the test:
 ```
 
 The project uses Jacoco for checking code coverage. To view the report:
+* if using the vscode test plugin for java, in order to generate the jacoco report, you have the run the following commands
 
 ```
 ./mvnw clean verify
 ./mvnw jacoco:report
 ```
+* if using the ./mvnw test command, the jacoco report will be automatically created (because of the setup in pom.xml) so you would not have to run the any extra commands
+
 Jacoco report is located at `target/site/jacoco/index.html`
 
 Swagger documentation could be found at:
@@ -26,86 +29,34 @@ Swagger documentation could be found at:
 
 `http://localhost:5055/swagger-ui/index.html` - swagger ui (prettier version)
 
-## Start up
+## Database seeding
 
-### Authentication and authorization flow
+The seed data can be found in the file data.sql. 
 
-1. Login 
-    - With login, please use the seed credentials provided in the UserController. They are
+    - username: tien@email.com, password: Tien12345 (admin)
+    - username: max@email.com, password: Max12345 (admin)
+    - username: user@email.com, password: User12345 (user)
 
-        ```java
-        {
-        	"username":"tien@email.com",
-        	"password": "Tien12345"
-        }
-        ```
+Notice that there is no mechanisim to remove the table if already exist, therefore in order to prevent duplicate data in the database, after running the project for the first time and got the seed data in the database, please comment out the following line in the `application.properties`
 
-        Test user in the seed database are:
+    spring.datasource.initialization-mode=always
 
-        - username: tien@email.com, password: Tien12345 (admin)
-        - username: max@email.com, password: Max12345 (admin)
-        - username: user@email.com, password: User12345 (user)
+## Docker compose and Dockerfile
 
-        Login Url: POST `http://localhost:5055/api/authenticate`
+To run the project in docker, use the following command: (navigate to the folder that contain docker-compose file before running the command)
 
-        Sample request body:
+    docker-compose up
 
-        - Using postman: Select *Body,*  choose raw
-        - enter the above credentials with json format in the body
-        - Add `Content-Type` as Key and `application/json` as Value in *Headers* tab
+To check the database and see the actual data, you can either connect to a database client software or exec into the docker container using the following commands:
 
-        *Response body:* 
+    docker exec -it tododo-db bash
 
-        ```java
-        200 OK 
-        accessToken: <token>
-        ```
+Once you are inside the database container, use the mysql command to access the database
 
-2. Register 
-    - Register new user
+    mysql -u admin -p
 
-        Register Url: POST `http://localhost:5055/api/register`
+After that, you would be prompted to enter password. The password is `root`. Enter the password and hit "Enter". Now you have access to the database! Just have to specify the database, from this moment onwards you can use mysql statements to query, delete, update the record. For example:
 
-        Sample request body:
-
-        - Using postman: Select *Body,*  choose raw
-        - enter the above credentials with json format in the body
-        ```java
-        {
-        	"username": <string:your_user_name>,
-        	"password": <string:your_secured_password>
-        }
-        ```
-        - Add `Content-Type` as Key and `application/json` as Value in *Headers* tab
-
-        *Response body:* 
-
-        ```java
-        200 OK 
-        {
-            "id": 123,
-            "username": "newUser",
-            "password": "$2a$10$sE1wcSEjBu2dEcjb91RADOMKywSPJB3Io4K6VuZXQPhZDzZ7zYu5C",
-            "active": true,
-            "role": "user"
-        }
-        ```
-3. Test Get request
-    - Receive "Hello user!" as response
-
-        Test URL: GET `http://localhost:5055/api/hello`
-
-        Before adding authorization header, you are expected to receive response with code 401-Unauthorized.
-
-        - In Postman, choose Authorization type as Bearer Token if using Authorization tab. If using Headers, specify Key="Authorization" and Value=Bearer <your_access_token> (**space** between `Bearer` and `access_token`)
-
-        *Note: To retrieve access_token, you need to authenticate yourself by providing the valid credentials and follow Section 1 above
-
-        *Response body:* 
-
-        ```json
-        200 OK 
-        Hello user!
-        ```
-
+    mysql> use spring_security;
+    mysql> select * from user;
 

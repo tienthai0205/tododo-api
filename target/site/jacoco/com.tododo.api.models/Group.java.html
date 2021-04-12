@@ -18,9 +18,9 @@ public class Group extends BaseModel {
     @Column
     private GroupTypeEnum type;
 
-<span class="fc" id="L21">    @ManyToMany(cascade = CascadeType.PERSIST)</span>
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = &quot;groupUser&quot;, joinColumns = @JoinColumn(name = &quot;group_id&quot;), inverseJoinColumns = @JoinColumn(name = &quot;user_id&quot;))
-    private Set&lt;UserEntity&gt; users = new HashSet&lt;&gt;();
+<span class="fc" id="L23">    private Set&lt;UserEntity&gt; users = new HashSet&lt;&gt;();</span>
 
 <span class="fc" id="L25">    public Group() {</span>
 <span class="fc" id="L26">    }</span>

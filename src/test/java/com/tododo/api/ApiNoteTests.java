@@ -32,176 +32,201 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest
 @ActiveProfiles("test")
 public class ApiNoteTests {
-    private MockMvc mockMvc;
+	private MockMvc mockMvc;
 
-    private String accessToken;
+	private String accessToken;
 
-    @Autowired
-    private ObjectMapper mapper;
+	@Autowired
+	private ObjectMapper mapper;
 
-    @Autowired
-    private WebApplicationContext context;
+	@Autowired
+	private WebApplicationContext context;
 
-    @Autowired
-    private NoteRepository noteRepository;
+	@Autowired
+	private NoteRepository noteRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    @Autowired
-    private TagRepository tagRepository;
+	@Autowired
+	private TagRepository tagRepository;
 
-    @BeforeEach
-    public void setup() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(SecurityMockMvcConfigurers.springSecurity())
-                .build();
-        getAccessToken();
-    }
+	@BeforeEach
+	public void setup() throws Exception {
+		mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(SecurityMockMvcConfigurers.springSecurity())
+				.build();
+		getAccessToken();
+	}
 
-    @Test
-    void getNotesForUser() throws Exception {
-        noteRepository.deleteAll();
-        String url = "/api/notes";
-        MvcResult forbiddenResult = mockMvc.perform(get(url)).andReturn();
-        assertEquals(401, forbiddenResult.getResponse().getStatus());
-        MvcResult result = mockMvc.perform(get(url).header("Authorization", "Bearer " + accessToken)).andReturn();
-        assertEquals(200, result.getResponse().getStatus());
-        assertEquals("[]", result.getResponse().getContentAsString());
-    }
+	@Test
+	void getNotesForUser() throws Exception {
+		noteRepository.deleteAll();
+		String url = "/api/notes";
+		MvcResult forbiddenResult = mockMvc.perform(get(url)).andReturn();
+		assertEquals(401, forbiddenResult.getResponse().getStatus());
+		MvcResult result = mockMvc.perform(get(url).header("Authorization", "Bearer " + accessToken)).andReturn();
+		assertEquals(200, result.getResponse().getStatus());
+		assertEquals("[]", result.getResponse().getContentAsString());
+	}
 
-    @Test
-    void getNote() throws Exception {
-        UserEntity currentUser = userRepository.findByUsername("tien@email.com");
-        Note newNote = new Note("Note1", "Test note1");
-        newNote.setUser(currentUser);
-        int id = noteRepository.save(newNote).getId();
+	@Test
+	void getNote() throws Exception {
+		UserEntity currentUser = userRepository.findByUsername("tien@email.com");
+		Note newNote = new Note("Note1", "Test note1");
+		newNote.setUser(currentUser);
+		int id = noteRepository.save(newNote).getId();
 
-        String url = "/api/notes/{id}";
-        MvcResult notfoundResult = mockMvc.perform(get(url, 30).header("Authorization", "Bearer " + accessToken))
-                .andReturn();
-        assertEquals(404, notfoundResult.getResponse().getStatus());
-        assertEquals("Note with id 30 not found", notfoundResult.getResponse().getContentAsString());
+		String url = "/api/notes/{id}";
+		MvcResult notfoundResult = mockMvc.perform(get(url, 30).header("Authorization", "Bearer " + accessToken))
+				.andReturn();
+		assertEquals(404, notfoundResult.getResponse().getStatus());
+		assertEquals("Note with id 30 not found", notfoundResult.getResponse().getContentAsString());
 
-        UserEntity anotherUser = userRepository.findByUsername("max@email.com");
-        Note maxNote = new Note("Note10", "Test note10");
-        maxNote.setUser(anotherUser);
-        int maxNoteId = noteRepository.save(maxNote).getId();
-        MvcResult forbiddenResult = mockMvc
-                .perform(get(url, maxNoteId).header("Authorization", "Bearer " + accessToken)).andReturn();
-        assertEquals(403, forbiddenResult.getResponse().getStatus());
+		UserEntity anotherUser = userRepository.findByUsername("max@email.com");
+		Note maxNote = new Note("Note10", "Test note10");
+		maxNote.setUser(anotherUser);
+		int maxNoteId = noteRepository.save(maxNote).getId();
+		MvcResult forbiddenResult = mockMvc
+				.perform(get(url, maxNoteId).header("Authorization", "Bearer " + accessToken)).andReturn();
+		assertEquals(403, forbiddenResult.getResponse().getStatus());
 
-        MvcResult result = mockMvc.perform(get(url, id).header("Authorization", "Bearer " + accessToken)).andReturn();
-        assertEquals(200, result.getResponse().getStatus());
-    }
+		MvcResult result = mockMvc.perform(get(url, id).header("Authorization", "Bearer " + accessToken)).andReturn();
+		assertEquals(200, result.getResponse().getStatus());
+	}
 
-    @Test
-    void addNote() throws Exception {
-        UserEntity currentUser = userRepository.findByUsername("tien@email.com");
-        Note newNote = new Note("Note1", "Test note1");
-        newNote.setUser(currentUser);
-        String jsonRequest = mapper.writeValueAsString(newNote);
-        String url = "/api/notes";
-        MvcResult result = mockMvc.perform(post(url).content(jsonRequest).contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + accessToken)).andReturn();
-        assertEquals(201, result.getResponse().getStatus());
-    }
+	@Test
+	void addNote() throws Exception {
+		UserEntity currentUser = userRepository.findByUsername("tien@email.com");
+		Note newNote = new Note("Note1", "Test note1");
+		newNote.setUser(currentUser);
+		String jsonRequest = mapper.writeValueAsString(newNote);
+		String url = "/api/notes";
+		MvcResult result = mockMvc.perform(post(url).content(jsonRequest).contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + accessToken)).andReturn();
+		assertEquals(201, result.getResponse().getStatus());
+	}
 
-    @Test
-    void deleteNote() throws Exception {
-        UserEntity currentUser = userRepository.findByUsername("tien@email.com");
-        Note newNote = new Note("Note1", "Test note1");
-        newNote.setUser(currentUser);
-        int id = noteRepository.save(newNote).getId();
+	@Test
+	void deleteNote() throws Exception {
+		UserEntity currentUser = userRepository.findByUsername("tien@email.com");
+		Note newNote = new Note("Note1", "Test note1");
+		newNote.setUser(currentUser);
+		int id = noteRepository.save(newNote).getId();
 
-        String url = "/api/notes/{id}";
-        MvcResult notfoundResult = mockMvc.perform(delete(url, 40).header("Authorization", "Bearer " + accessToken))
-                .andReturn();
+		String url = "/api/notes/{id}";
+		MvcResult notfoundResult = mockMvc.perform(delete(url, 40).header("Authorization", "Bearer " + accessToken))
+				.andReturn();
 
-        assertEquals(404, notfoundResult.getResponse().getStatus());
-        assertEquals("Note with id 40 not found", notfoundResult.getResponse().getContentAsString());
+		assertEquals(404, notfoundResult.getResponse().getStatus());
+		assertEquals("Note with id 40 not found", notfoundResult.getResponse().getContentAsString());
 
-        UserEntity anotherUser = userRepository.findByUsername("max@email.com");
-        Note maxNote = new Note("Note10", "Test note10");
-        maxNote.setUser(anotherUser);
-        int maxNoteId = noteRepository.save(maxNote).getId();
+		UserEntity anotherUser = userRepository.findByUsername("max@email.com");
+		Note maxNote = new Note("Note10", "Test note10");
+		maxNote.setUser(anotherUser);
+		int maxNoteId = noteRepository.save(maxNote).getId();
 
-        MvcResult forbiddenResult = mockMvc
-                .perform(delete(url, maxNoteId).header("Authorization", "Bearer " + accessToken)).andReturn();
-        assertEquals(403, forbiddenResult.getResponse().getStatus());
+		MvcResult forbiddenResult = mockMvc
+				.perform(delete(url, maxNoteId).header("Authorization", "Bearer " + accessToken)).andReturn();
+		assertEquals(403, forbiddenResult.getResponse().getStatus());
 
-        MvcResult result = mockMvc.perform(delete(url, id).header("Authorization", "Bearer " + accessToken))
-                .andReturn();
-        assertEquals("Your request has been successfully handled!", result.getResponse().getContentAsString());
-    }
+		MvcResult result = mockMvc.perform(delete(url, id).header("Authorization", "Bearer " + accessToken))
+				.andReturn();
+		assertEquals("Your request has been successfully handled!", result.getResponse().getContentAsString());
+	}
 
-    @Test
-    void removeTagFromNote() throws Exception {
-        UserEntity currentUser = userRepository.findByUsername("tien@email.com");
-        Note newNote = new Note("Note1", "Test note1");
-        newNote.setUser(currentUser);
-        int id = noteRepository.save(newNote).getId();
+	@Test
+	void removeTagFromNote() throws Exception {
+		UserEntity currentUser = userRepository.findByUsername("tien@email.com");
+		Note newNote = new Note("Note1", "Test note1");
+		newNote.setUser(currentUser);
+		int id = noteRepository.save(newNote).getId();
 
-        Tag newTag = new Tag("Tag4", "Test tag4 for note1");
-        newTag.setUser(currentUser);
-        int tagId = tagRepository.save(newTag).getId();
+		Tag newTag = new Tag("Tag4", "Test tag4 for note1");
+		newTag.setUser(currentUser);
+		int tagId = tagRepository.save(newTag).getId();
 
-        newNote.addTag(newTag);
+		newNote.addTag(newTag);
 
-        String url = "/api/notes/{id}/tag/{tagId}";
-        MvcResult result = mockMvc.perform(delete(url, id, tagId).header("Authorization", "Bearer " + accessToken))
-                .andReturn();
-        assertEquals(200, result.getResponse().getStatus());
-    }
+		String url = "/api/notes/{id}/tag/{tagId}";
+		MvcResult result = mockMvc.perform(delete(url, id, tagId).header("Authorization", "Bearer " + accessToken))
+				.andReturn();
+		assertEquals(200, result.getResponse().getStatus());
+	}
 
-    @Test
-    void addTagToNote() throws Exception {
-        UserEntity currentUser = userRepository.findByUsername("tien@email.com");
-        Note newNote = new Note("Note1", "Test note1");
-        newNote.setUser(currentUser);
-        int id = noteRepository.save(newNote).getId();
+	@Test
+	void updateNote() throws Exception {
+		String url = "/api/notes/{id}";
+		Note updateTodo = new Note("Test update note", "test update content");
+		String jsonRequest = mapper.writeValueAsString(updateTodo);
 
-        Tag newTag = new Tag("Tag5", "Test tag5 for note1");
-        newTag.setUser(currentUser);
-        int tagId = tagRepository.save(newTag).getId();
+		UserEntity anotherUser = userRepository.findByUsername("max@email.com");
+		Note maxNote = new Note("note10", "Test note10");
+		maxNote.setUser(anotherUser);
+		int maxTodoId = noteRepository.save(maxNote).getId();
 
-        String url = "/api/notes/{id}/tag/{tagId}";
-        MvcResult result = mockMvc.perform(put(url, id, tagId).header("Authorization", "Bearer " + accessToken))
-                .andReturn();
-        assertEquals(200, result.getResponse().getStatus());
-    }
+		MvcResult forbiddenResult = mockMvc.perform(put(url, maxTodoId).content(jsonRequest)
+				.contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer " + accessToken)).andReturn();
+		assertEquals(403, forbiddenResult.getResponse().getStatus());
 
-    @Test
-    void getTags() throws Exception {
-        String url = "/api/notes/{id}/tags";
+		MvcResult notfoundResult = mockMvc.perform(put(url, 300).content(jsonRequest)
+				.contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer " + accessToken)).andReturn();
+		assertEquals(404, notfoundResult.getResponse().getStatus());
 
-        UserEntity anotherUser = userRepository.findByUsername("max@email.com");
-        Note maxNote = new Note("Note10", "Test note10");
-        maxNote.setUser(anotherUser);
-        int maxNoteId = noteRepository.save(maxNote).getId();
+		System.out.println(noteRepository.findAll());
+		MvcResult result = mockMvc.perform(put(url, 1).content(jsonRequest).contentType(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer " + accessToken)).andReturn();
+		assertEquals(200, result.getResponse().getStatus());
+	}
 
-        MvcResult forbiddenResult = mockMvc
-                .perform(get(url, maxNoteId).header("Authorization", "Bearer " + accessToken)).andReturn();
-        assertEquals(403, forbiddenResult.getResponse().getStatus());
+	@Test
+	void addTagToNote() throws Exception {
+		UserEntity currentUser = userRepository.findByUsername("tien@email.com");
+		Note newNote = new Note("Note1", "Test note1");
+		newNote.setUser(currentUser);
+		int id = noteRepository.save(newNote).getId();
 
-        MvcResult result = mockMvc.perform(get(url, 1).header("Authorization", "Bearer " + accessToken)).andReturn();
-        assertEquals(200, result.getResponse().getStatus());
-    }
+		Tag newTag = new Tag("Tag5", "Test tag5 for note1");
+		newTag.setUser(currentUser);
+		int tagId = tagRepository.save(newTag).getId();
 
-    private void getAccessToken() throws Exception {
-        AuthenticationRequest request = new AuthenticationRequest();
-        request.setUsername("tien@email.com");
-        request.setPassword("Tien12345");
-        String jsonRequest = mapper.writeValueAsString(request);
+		String url = "/api/notes/{id}/tag/{tagId}";
+		MvcResult result = mockMvc.perform(put(url, id, tagId).header("Authorization", "Bearer " + accessToken))
+				.andReturn();
+		assertEquals(200, result.getResponse().getStatus());
+	}
 
-        MvcResult result = mockMvc
-                .perform(post("/api/authenticate").content(jsonRequest).contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
+	@Test
+	void getTags() throws Exception {
+		String url = "/api/notes/{id}/tags";
 
-        String resultString = result.getResponse().getContentAsString();
+		UserEntity anotherUser = userRepository.findByUsername("max@email.com");
+		Note maxNote = new Note("Note10", "Test note10");
+		maxNote.setUser(anotherUser);
+		int maxNoteId = noteRepository.save(maxNote).getId();
 
-        Map<String, String> jwt = mapper.readValue(resultString, Map.class);
-        accessToken = jwt.get("jwt");
+		MvcResult forbiddenResult = mockMvc
+				.perform(get(url, maxNoteId).header("Authorization", "Bearer " + accessToken)).andReturn();
+		assertEquals(403, forbiddenResult.getResponse().getStatus());
 
-        // accessToken = rsp.getJwt();
-    }
+		MvcResult result = mockMvc.perform(get(url, 1).header("Authorization", "Bearer " + accessToken)).andReturn();
+		assertEquals(200, result.getResponse().getStatus());
+	}
+
+	private void getAccessToken() throws Exception {
+		AuthenticationRequest request = new AuthenticationRequest();
+		request.setUsername("tien@email.com");
+		request.setPassword("Tien12345");
+		String jsonRequest = mapper.writeValueAsString(request);
+
+		MvcResult result = mockMvc
+				.perform(post("/api/authenticate").content(jsonRequest).contentType(MediaType.APPLICATION_JSON))
+				.andReturn();
+
+		String resultString = result.getResponse().getContentAsString();
+
+		Map<String, String> jwt = mapper.readValue(resultString, Map.class);
+		accessToken = jwt.get("jwt");
+
+		// accessToken = rsp.getJwt();
+	}
 }

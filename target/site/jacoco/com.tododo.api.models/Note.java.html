@@ -26,9 +26,9 @@ public class Note extends BaseModel {
     private String content;
     // private Group group;
 
-<span class="fc" id="L29">    @ManyToMany(cascade = CascadeType.PERSIST)</span>
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = &quot;noteTag&quot;, joinColumns = @JoinColumn(name = &quot;note_id&quot;), inverseJoinColumns = @JoinColumn(name = &quot;tag_id&quot;))
-    private Set&lt;Tag&gt; tags = new HashSet&lt;&gt;();
+<span class="fc" id="L31">    private Set&lt;Tag&gt; tags = new HashSet&lt;&gt;();</span>
 
     // @ManyToMany
     // private Set&lt;User&gt; sharedWith;

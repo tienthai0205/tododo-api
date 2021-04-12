@@ -33,8 +33,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
     private JwtRequestFilter jwtRequestFilter;
 
 <span class="fc" id="L35">    private static final String[] AUTH_WHITELIST = { &quot;/v2/api-docs&quot;, &quot;/swagger-resources&quot;, &quot;/swagger-resources/**&quot;,</span>
-            &quot;/configuration/ui&quot;, &quot;/configuration/security&quot;, &quot;/swagger-ui.html&quot;, &quot;/webjars/**&quot;, &quot;/v3/api-docs/**&quot;,
-            &quot;/swagger-ui/**&quot;, &quot;/h2-console/**&quot; };
+<span class="fc" id="L36">            &quot;/configuration/ui&quot;, &quot;/configuration/security&quot;, &quot;/swagger-ui.html&quot;, &quot;/webjars/**&quot;, &quot;/v3/api-docs/**&quot;,</span>
+<span class="fc" id="L37">            &quot;/swagger-ui/**&quot;, &quot;/h2-console/**&quot; };</span>
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -59,8 +59,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 <span class="fc" id="L59">                .antMatchers(&quot;/api/*&quot;).hasAnyRole(&quot;ADMIN&quot;, &quot;USER&quot;).anyRequest().authenticated().and()</span>
 <span class="fc" id="L60">                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()</span>
 <span class="fc" id="L61">                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);</span>
+<span class="fc" id="L62">        httpSecurity.headers().frameOptions().disable();</span>
 
-<span class="fc" id="L63">        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);</span>
-<span class="fc" id="L64">    }</span>
+<span class="fc" id="L64">        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);</span>
+<span class="fc" id="L65">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

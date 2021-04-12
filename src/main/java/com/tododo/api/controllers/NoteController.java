@@ -72,6 +72,25 @@ public class NoteController {
         return ResponseEntity.ok("Your request has been successfully handled!");
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateTodoItem(Principal principal, @PathVariable int id, @RequestBody Note updateNote) {
+        Note note = noteRepository.findById(id);
+
+        if (note == null) {
+            return new ResponseEntity<>("Note with id " + id + " not found", HttpStatus.NOT_FOUND);
+        }
+
+        if (note.getUser().getId() != currentUser(principal).getId()) {
+            return new ResponseEntity<>("You are not authorized to retrieved this item", HttpStatus.FORBIDDEN);
+        }
+
+        // TODO: Find a more generic or smart way to handle this
+        note.setTitle(updateNote.getTitle());
+        note.setContent(updateNote.getContent());
+
+        return ResponseEntity.ok(noteRepository.save(note));
+    }
+
     @PutMapping("/{noteId}/tag/{tagId}")
     public ResponseEntity<?> addTagToNote(Principal principal, @PathVariable int noteId, @PathVariable int tagId) {
         Note note = noteRepository.findById(noteId);
