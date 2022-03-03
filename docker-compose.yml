@@ -13,7 +13,6 @@ services:
 
   tododo-app:
     build: ./
-    image: registry.gitlab.com/tienthai460592/tododoapi-backup/tododo-pipeline:latest
     restart: on-failure
     depends_on:
       - tododo-db

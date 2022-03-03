@@ -78,7 +78,7 @@ To run the project in docker, use the following command: (navigate to the folder
 
 To check the database and see the actual data, you can either connect to a database client software or exec into the docker container using the following commands:
 
-    docker exec -it tododo-db bash
+    docker exec -it [db-container-name] bash
 
 Once you are inside the database container, use the mysql command to access the database
 
